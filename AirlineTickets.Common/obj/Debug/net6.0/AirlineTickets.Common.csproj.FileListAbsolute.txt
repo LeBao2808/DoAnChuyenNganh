@@ -1,0 +1,12 @@
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.Common\bin\Debug\net6.0\AirlineTickets.Common.deps.json
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.Common\bin\Debug\net6.0\AirlineTickets.Common.dll
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.Common\bin\Debug\net6.0\AirlineTickets.Common.pdb
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.Common\obj\Debug\net6.0\AirlineTickets.Common.GeneratedMSBuildEditorConfig.editorconfig
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.Common\obj\Debug\net6.0\AirlineTickets.Common.AssemblyInfoInputs.cache
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.Common\obj\Debug\net6.0\AirlineTickets.Common.AssemblyInfo.cs
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.Common\obj\Debug\net6.0\AirlineTickets.Common.csproj.CoreCompileInputs.cache
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.Common\obj\Debug\net6.0\AirlineTickets.Common.sourcelink.json
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.Common\obj\Debug\net6.0\AirlineTickets.Common.dll
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.Common\obj\Debug\net6.0\refint\AirlineTickets.Common.dll
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.Common\obj\Debug\net6.0\AirlineTickets.Common.pdb
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.Common\obj\Debug\net6.0\ref\AirlineTickets.Common.dll

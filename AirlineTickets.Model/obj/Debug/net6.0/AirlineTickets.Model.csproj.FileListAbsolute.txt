@@ -1,0 +1,16 @@
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.Model\bin\Debug\net6.0\AirlineTickets.Model.deps.json
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.Model\bin\Debug\net6.0\AirlineTickets.Model.dll
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.Model\bin\Debug\net6.0\AirlineTickets.Model.pdb
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.Model\bin\Debug\net6.0\Maynghien.Common.dll
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.Model\bin\Debug\net6.0\Maynghien.Common.pdb
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.Model\obj\Debug\net6.0\AirlineTickets.Model.csproj.AssemblyReference.cache
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.Model\obj\Debug\net6.0\AirlineTickets.Model.GeneratedMSBuildEditorConfig.editorconfig
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.Model\obj\Debug\net6.0\AirlineTickets.Model.AssemblyInfoInputs.cache
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.Model\obj\Debug\net6.0\AirlineTickets.Model.AssemblyInfo.cs
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.Model\obj\Debug\net6.0\AirlineTickets.Model.csproj.CoreCompileInputs.cache
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.Model\obj\Debug\net6.0\AirlineTickets.Model.sourcelink.json
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.Model\obj\Debug\net6.0\AirlineTickets.Model.csproj.CopyComplete
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.Model\obj\Debug\net6.0\AirlineTickets.Model.dll
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.Model\obj\Debug\net6.0\refint\AirlineTickets.Model.dll
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.Model\obj\Debug\net6.0\AirlineTickets.Model.pdb
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.Model\obj\Debug\net6.0\ref\AirlineTickets.Model.dll

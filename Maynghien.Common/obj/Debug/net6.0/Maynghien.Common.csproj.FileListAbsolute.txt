@@ -1,0 +1,13 @@
+D:\DoAnChuyenNganh\DoAnChuyenNganh\Maynghien.Common\bin\Debug\net6.0\Maynghien.Common.deps.json
+D:\DoAnChuyenNganh\DoAnChuyenNganh\Maynghien.Common\bin\Debug\net6.0\Maynghien.Common.dll
+D:\DoAnChuyenNganh\DoAnChuyenNganh\Maynghien.Common\bin\Debug\net6.0\Maynghien.Common.pdb
+D:\DoAnChuyenNganh\DoAnChuyenNganh\Maynghien.Common\obj\Debug\net6.0\Maynghien.Common.csproj.AssemblyReference.cache
+D:\DoAnChuyenNganh\DoAnChuyenNganh\Maynghien.Common\obj\Debug\net6.0\Maynghien.Common.GeneratedMSBuildEditorConfig.editorconfig
+D:\DoAnChuyenNganh\DoAnChuyenNganh\Maynghien.Common\obj\Debug\net6.0\Maynghien.Common.AssemblyInfoInputs.cache
+D:\DoAnChuyenNganh\DoAnChuyenNganh\Maynghien.Common\obj\Debug\net6.0\Maynghien.Common.AssemblyInfo.cs
+D:\DoAnChuyenNganh\DoAnChuyenNganh\Maynghien.Common\obj\Debug\net6.0\Maynghien.Common.csproj.CoreCompileInputs.cache
+D:\DoAnChuyenNganh\DoAnChuyenNganh\Maynghien.Common\obj\Debug\net6.0\Maynghien.Common.sourcelink.json
+D:\DoAnChuyenNganh\DoAnChuyenNganh\Maynghien.Common\obj\Debug\net6.0\Maynghien.Common.dll
+D:\DoAnChuyenNganh\DoAnChuyenNganh\Maynghien.Common\obj\Debug\net6.0\refint\Maynghien.Common.dll
+D:\DoAnChuyenNganh\DoAnChuyenNganh\Maynghien.Common\obj\Debug\net6.0\Maynghien.Common.pdb
+D:\DoAnChuyenNganh\DoAnChuyenNganh\Maynghien.Common\obj\Debug\net6.0\ref\Maynghien.Common.dll

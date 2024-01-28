@@ -1,0 +1,12 @@
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.TransferCronjob\bin\Debug\net6.0\AirlineTickets.TransferCronjob.deps.json
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.TransferCronjob\bin\Debug\net6.0\AirlineTickets.TransferCronjob.dll
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.TransferCronjob\bin\Debug\net6.0\AirlineTickets.TransferCronjob.pdb
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.TransferCronjob\obj\Debug\net6.0\AirlineTickets.TransferCronjob.GeneratedMSBuildEditorConfig.editorconfig
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.TransferCronjob\obj\Debug\net6.0\AirlineTickets.TransferCronjob.AssemblyInfoInputs.cache
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.TransferCronjob\obj\Debug\net6.0\AirlineTickets.TransferCronjob.AssemblyInfo.cs
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.TransferCronjob\obj\Debug\net6.0\AirlineTickets.TransferCronjob.csproj.CoreCompileInputs.cache
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.TransferCronjob\obj\Debug\net6.0\AirlineTickets.TransferCronjob.sourcelink.json
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.TransferCronjob\obj\Debug\net6.0\AirlineTickets.TransferCronjob.dll
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.TransferCronjob\obj\Debug\net6.0\refint\AirlineTickets.TransferCronjob.dll
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.TransferCronjob\obj\Debug\net6.0\AirlineTickets.TransferCronjob.pdb
+D:\DoAnChuyenNganh\DoAnChuyenNganh\AirlineTickets.TransferCronjob\obj\Debug\net6.0\ref\AirlineTickets.TransferCronjob.dll
