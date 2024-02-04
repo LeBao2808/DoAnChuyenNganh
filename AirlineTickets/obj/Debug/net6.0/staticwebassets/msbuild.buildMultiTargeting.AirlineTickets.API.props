@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\AirlineTickets.API.props" />
+</Project>
