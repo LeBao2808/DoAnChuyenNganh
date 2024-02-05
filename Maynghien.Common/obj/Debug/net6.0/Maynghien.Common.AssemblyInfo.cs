@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Maynghien.Common")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e84c94f43f0032eed036bdd4c0915b9abc7941a7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+467fa5f327ce357e638f47e24e4972efaa8891c6")]
 [assembly: System.Reflection.AssemblyProductAttribute("Maynghien.Common")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Maynghien.Common")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

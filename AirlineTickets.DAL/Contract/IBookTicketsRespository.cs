@@ -12,6 +12,7 @@ namespace AirlineTickets.DAL.Contract
 {
     public interface IBookTicketsRespository : IGenericRepository<BookTickets, AirlineTicketsDBContext>
     {
+
         public int CountRecordsByPredicate(Expression<Func<BookTickets, bool>> predicate);
         public IQueryable<BookTickets> FindByPredicate(Expression<Func<BookTickets, bool>> predicate);
     }
