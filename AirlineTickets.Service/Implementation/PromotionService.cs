@@ -117,7 +117,12 @@ namespace AirlineTickets.Service.Implementation
                 var list = query.Where(x => x.IsDeleted == false).Select(m => new PromotionDto
                 {
                     Id = m.Id,
-                   
+                   CustomersId = m.CustomersId,
+                   Name = m.Name,
+                   NumberOfSeats = m.NumberOfSeats,
+                   PromotionInformation = m.PromotionInformation,
+                   PromotionType = m.PromotionType,
+                   Stastus = m.Stastus,
 
                 }).ToList();
                 result.IsSuccess = true;

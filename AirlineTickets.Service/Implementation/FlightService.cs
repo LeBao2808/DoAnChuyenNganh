@@ -117,7 +117,14 @@ namespace AirlineTickets.Service.Implementation
                 var list = query.Where(x => x.IsDeleted == false).Select(m => new FlightDto
                 {
                     Id = m.Id,
-                   
+                    FlightNumber = m.FlightNumber,
+                    FlightTime = m.FlightTime,
+                    StartDate = m.StartDate,
+                    StartingPoint = m.StartingPoint,
+                    EndingPoint = m.EndingPoint,
+                    PartnerId = m.PartnerId,
+                    NumberOfEmptySeats = m.NumberOfEmptySeats,
+                    TicketPrice = m.TicketPrice,
 
                 }).ToList();
                 result.IsSuccess = true;
@@ -167,6 +174,9 @@ namespace AirlineTickets.Service.Implementation
                             case "partnerId":
                                 predicate = predicate.And(m => m.PartnerId.ToString().Contains(filter.Value));
                                 break;
+                            case "flightNumber":
+                                predicate = predicate.And(m => m.FlightNumber.Contains(filter.Value));
+                                break;
 
                             default:
                                 break;
@@ -195,17 +205,21 @@ namespace AirlineTickets.Service.Implementation
                 int pageIndex = request.PageIndex ?? 1;
                 int pageSize = request.PageSize ?? 1;
                 int startIndex = (pageIndex - 1) * (int)pageSize;
-                var UserList = users.Skip(startIndex).Take(pageSize).ToList();
-                var dtoList = _mapper.Map<List<FlightDto>>(UserList);
-                //if (dtoList != null && dtoList.Count > 0)
-                //{
-                //    for (int i = 0; i < UserList.Count; i++)
-                //    {
-                //        var dtouser = dtoList[i];
-                //        var identityUser = UserList[i];
-                //        dtouser.Role = (await _userManager.GetRolesAsync(identityUser)).First();
-                //    }
-                //}
+                var UserList = users.Skip(startIndex).Take(pageSize);
+                //var dtoList = _mapper.Map<List<FlightDto>>(UserList);
+                var dtoList =UserList.Select(m => new FlightDto
+                {
+                    Id = m.Id,
+                    FlightNumber = m.FlightNumber,
+                    FlightTime = m.FlightTime,
+                    StartDate = m.StartDate,
+                    StartingPoint = m.StartingPoint,
+                    EndingPoint = m.EndingPoint,
+                    PartnerId = m.PartnerId,
+                    NumberOfEmptySeats = m.NumberOfEmptySeats,
+                    TicketPrice = m.TicketPrice,
+                }).ToList();
+                
                 var searchUserResult = new SearchResponse<FlightDto>
                 {
                     TotalRows = numOfRecords,

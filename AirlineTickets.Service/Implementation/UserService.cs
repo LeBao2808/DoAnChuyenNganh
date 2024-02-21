@@ -1,5 +1,6 @@
 ﻿using AirlineTickets.DAL.Contract;
 using AirlineTickets.DAL.Models.Context;
+using AirlineTickets.Model.Dto;
 using AirlineTickets.Service.Contract;
 using AutoMapper;
 using LinqKit;
@@ -8,7 +9,6 @@ using MayNghien.Models.Request.Base;
 using MayNghien.Models.Response.Base;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using QuanLyNhanSuBackEnd.Model.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;

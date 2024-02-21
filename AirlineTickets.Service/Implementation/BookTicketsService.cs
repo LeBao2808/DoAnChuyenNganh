@@ -39,14 +39,14 @@ namespace AirlineTickets.Service.Implementation
                 {
                     return result.BuildError("Cannot find Account by this user");
                 }
-                var tuyendung = new BookTickets();
-                tuyendung = _mapper.Map<BookTickets>(request);
-                tuyendung.Id = Guid.NewGuid();
-                tuyendung.CreatedBy = UserName;
+                var bookTickets = new BookTickets();
+                bookTickets = _mapper.Map<BookTickets>(request);
+                bookTickets.Id = Guid.NewGuid();
+                bookTickets.CreatedBy = UserName;
 
-                _bookTicketsRespository.Add(tuyendung);
+                _bookTicketsRespository.Add(bookTickets);
 
-                request.Id = tuyendung.Id;
+                request.Id = bookTickets.Id;
                 result.IsSuccess = true;
                 result.Data = request;
                 return result;
@@ -64,11 +64,11 @@ namespace AirlineTickets.Service.Implementation
             var result = new AppResponse<string>();
             try
             {
-                var tuyendung = new BookTickets();
-                tuyendung = _bookTicketsRespository.Get(Id);
-                tuyendung.IsDeleted = true;
+                var bookTickets = new BookTickets();
+                bookTickets = _bookTicketsRespository.Get(Id);
+                bookTickets.IsDeleted = true;
 
-                _bookTicketsRespository.Edit(tuyendung);
+                _bookTicketsRespository.Edit(bookTickets);
 
                 result.IsSuccess = true;
                 result.Data = "Delete Sucessfuly";
@@ -140,8 +140,8 @@ namespace AirlineTickets.Service.Implementation
             var result = new AppResponse<BookTicketsDto>();
             try
             {
-                var tuyendung = _bookTicketsRespository.Get(Id);
-                var data = _mapper.Map<BookTicketsDto>(tuyendung);
+                var bookTickets = _bookTicketsRespository.Get(Id);
+                var data = _mapper.Map<BookTicketsDto>(bookTickets);
                 result.IsSuccess = true;
                 result.Data = data;
                 return result;

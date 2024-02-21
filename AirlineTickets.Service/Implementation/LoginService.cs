@@ -1,9 +1,9 @@
-﻿using AirlineTickets.Service.Contract;
+﻿using AirlineTickets.Model.Dto;
+using AirlineTickets.Service.Contract;
 using MayNghien.Models.Response.Base;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using QuanLyNhanSuBackEnd.Model.Dto;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;

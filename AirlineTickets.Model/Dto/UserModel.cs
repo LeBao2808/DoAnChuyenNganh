@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuanLyNhanSuBackEnd.Model.Dto
+namespace AirlineTickets.Model.Dto
 {
-    public class UserModel :BaseDto
+    public class UserModel : BaseDto
     {
         //public string? Id { get; set; }
         public string? UserName { get; set; }

@@ -9,5 +9,11 @@ namespace AirlineTickets.Model.Dto
 {
     public class PromotionDto : BaseDto
     {
+        public string? Name { get; set; }
+        public string? PromotionInformation { get; set; }
+        public string? PromotionType { get; set; }
+        public int? NumberOfSeats { get; set; }
+        public bool? Stastus { get; set; }
+        public Guid? CustomersId { get; set; }
     }
 }

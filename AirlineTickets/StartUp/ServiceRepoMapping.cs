@@ -22,6 +22,7 @@ namespace AirlineTickets.API.StartUp
             builder.Services.AddScoped<IPayService, PayService>();
             builder.Services.AddScoped<IPromotionService, PromotionService>();
             builder.Services.AddScoped<ILoginService, LoginService>();
+            builder.Services.AddScoped<IUserService, UserService>();
 
             //builder.Services.AddScoped(typeof(IPromotionRespository),typeof(PromotionRespository));
 
@@ -37,6 +38,7 @@ namespace AirlineTickets.API.StartUp
             builder.Services.AddScoped<IPartnerRespository, PartnerRespository>();
             builder.Services.AddScoped<IPayRespository, PayRespository>();
             builder.Services.AddScoped<IPromotionRespository, PromotionRespository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
 
             #endregion Repository Mapping
         }

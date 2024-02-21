@@ -1,6 +1,7 @@
 ﻿using AirlineTickets.Model.Dto;
 using AirlineTickets.Service.Contract;
 using MayNghien.Models.Request.Base;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,6 +9,7 @@ namespace AirlineTickets.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class PayController : Controller
     {
         private readonly IPayService _payService;

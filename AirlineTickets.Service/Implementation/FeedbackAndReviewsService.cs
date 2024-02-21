@@ -117,6 +117,11 @@ namespace AirlineTickets.Service.Implementation
                 var list = query.Where(x => x.IsDeleted == false).Select(m => new FeedbackAndReviewsDto
                 {
                     Id = m.Id,
+                    CustomersId = m.CustomersId,
+                    Feedback = m.Feedback,
+                    FlightId = m.FlightId,
+                    PointEvaluation = m.PointEvaluation,
+                    ReactionTime = m.ReactionTime,
                     
 
                 }).ToList();

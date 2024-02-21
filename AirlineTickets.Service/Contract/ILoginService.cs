@@ -1,5 +1,5 @@
-﻿using MayNghien.Models.Response.Base;
-using QuanLyNhanSuBackEnd.Model.Dto;
+﻿using AirlineTickets.Model.Dto;
+using MayNghien.Models.Response.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;

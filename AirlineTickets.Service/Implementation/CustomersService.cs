@@ -38,14 +38,14 @@ namespace AirlineTickets.Service.Implementation
                 {
                     return result.BuildError("Cannot find Account by this user");
                 }
-                var tuyendung = new Customers();
-                tuyendung = _mapper.Map<Customers>(request);
-                tuyendung.Id = Guid.NewGuid();
-                tuyendung.CreatedBy = UserName;
+                var customers = new Customers();
+                customers = _mapper.Map<Customers>(request);
+                customers.Id = Guid.NewGuid();
+                customers.CreatedBy = UserName;
 
-                _customersRespository.Add(tuyendung);
+                _customersRespository.Add(customers);
 
-                request.Id = tuyendung.Id;
+                request.Id = customers.Id;
                 result.IsSuccess = true;
                 result.Data = request;
                 return result;
@@ -63,11 +63,11 @@ namespace AirlineTickets.Service.Implementation
             var result = new AppResponse<string>();
             try
             {
-                var tuyendung = new Customers();
-                tuyendung = _customersRespository.Get(Id);
-                tuyendung.IsDeleted = true;
+                var customers = new Customers();
+                customers = _customersRespository.Get(Id);
+                customers.IsDeleted = true;
 
-                _customersRespository.Edit(tuyendung);
+                _customersRespository.Edit(customers);
 
                 result.IsSuccess = true;
                 result.Data = "Delete Sucessfuly";
@@ -84,19 +84,19 @@ namespace AirlineTickets.Service.Implementation
 
 
 
-        public AppResponse<CustomersDto> Edit(CustomersDto tuyendung)
+        public AppResponse<CustomersDto> Edit(CustomersDto customers)
         {
             var result = new AppResponse<CustomersDto>();
             try
             {
                 //var UserName = ClaimHelper.GetClainByName(_httpContextAccessor, "UserName");
                 var request = new Customers();
-                request = _mapper.Map<Customers>(tuyendung);
+                request = _mapper.Map<Customers>(customers);
                 //request.CreatedBy = UserName;
                 _customersRespository.Edit(request);
 
                 result.IsSuccess = true;
-                result.Data = tuyendung;
+                result.Data = customers;
                 return result;
             }
             catch (Exception ex)
@@ -117,7 +117,10 @@ namespace AirlineTickets.Service.Implementation
                 var list = query.Where(x => x.IsDeleted == false).Select(m => new CustomersDto
                 {
                     Id = m.Id,
-                   
+                   Name = m.Name,
+                   Address = m.Address,
+                   Email = m.Email,
+                   PhoneNumber = m.PhoneNumber,
 
                 }).ToList();
                 result.IsSuccess = true;
@@ -195,17 +198,17 @@ namespace AirlineTickets.Service.Implementation
                 int pageIndex = request.PageIndex ?? 1;
                 int pageSize = request.PageSize ?? 1;
                 int startIndex = (pageIndex - 1) * (int)pageSize;
-                var UserList = users.Skip(startIndex).Take(pageSize).ToList();
-                var dtoList = _mapper.Map<List<CustomersDto>>(UserList);
-                //if (dtoList != null && dtoList.Count > 0)
-                //{
-                //    for (int i = 0; i < UserList.Count; i++)
-                //    {
-                //        var dtouser = dtoList[i];
-                //        var identityUser = UserList[i];
-                //        dtouser.Role = (await _userManager.GetRolesAsync(identityUser)).First();
-                //    }
-                //}
+                var UserList = users.Skip(startIndex).Take(pageSize);
+                //var dtoList = _mapper.Map<List<CustomersDto>>(UserList);
+                var dtoList = UserList.Select(x => new CustomersDto
+                {
+                    Address = x.Address,
+                    Email = x.Email,
+                    Id = x.Id,
+                    Name = x.Name,
+                    PhoneNumber = x.PhoneNumber,
+                }).ToList();
+              
                 var searchUserResult = new SearchResponse<CustomersDto>
                 {
                     TotalRows = numOfRecords,

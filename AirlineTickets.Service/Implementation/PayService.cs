@@ -117,7 +117,11 @@ namespace AirlineTickets.Service.Implementation
                 var list = query.Where(x => x.IsDeleted == false).Select(m => new PayDto
                 {
                     Id = m.Id,
-                  
+                  PaymentStatus = m.PaymentStatus,
+                  CustomersId = m.CustomersId,
+                  PayAmount = m.PayAmount,
+                  PayDate = m.PayDate,
+                  PaymentMethods = m.PaymentMethods,
 
                 }).ToList();
                 result.IsSuccess = true;
@@ -197,15 +201,7 @@ namespace AirlineTickets.Service.Implementation
                 int startIndex = (pageIndex - 1) * (int)pageSize;
                 var UserList = users.Skip(startIndex).Take(pageSize).ToList();
                 var dtoList = _mapper.Map<List<PayDto>>(UserList);
-                //if (dtoList != null && dtoList.Count > 0)
-                //{
-                //    for (int i = 0; i < UserList.Count; i++)
-                //    {
-                //        var dtouser = dtoList[i];
-                //        var identityUser = UserList[i];
-                //        dtouser.Role = (await _userManager.GetRolesAsync(identityUser)).First();
-                //    }
-                //}
+                
                 var searchUserResult = new SearchResponse<PayDto>
                 {
                     TotalRows = numOfRecords,

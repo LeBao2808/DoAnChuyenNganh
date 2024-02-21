@@ -38,14 +38,14 @@ namespace AirlineTickets.Service.Implementation
                 {
                     return result.BuildError("Cannot find Account by this user");
                 }
-                var tuyendung = new BookingHistory();
-                tuyendung = _mapper.Map<BookingHistory>(request);
-                tuyendung.Id = Guid.NewGuid();
-                tuyendung.CreatedBy = UserName;
+                var bookingHistory = new BookingHistory();
+                bookingHistory = _mapper.Map<BookingHistory>(request);
+                bookingHistory.Id = Guid.NewGuid();
+                bookingHistory.CreatedBy = UserName;
 
-                _bookingHistoryRespository.Add(tuyendung);
+                _bookingHistoryRespository.Add(bookingHistory);
 
-                request.Id = tuyendung.Id;
+                request.Id = bookingHistory.Id;
                 result.IsSuccess = true;
                 result.Data = request;
                 return result;
@@ -63,11 +63,11 @@ namespace AirlineTickets.Service.Implementation
             var result = new AppResponse<string>();
             try
             {
-                var tuyendung = new BookingHistory();
-                tuyendung = _bookingHistoryRespository.Get(Id);
-                tuyendung.IsDeleted = true;
+                var bookingHistory = new BookingHistory();
+                bookingHistory = _bookingHistoryRespository.Get(Id);
+                bookingHistory.IsDeleted = true;
 
-                _bookingHistoryRespository.Edit(tuyendung);
+                _bookingHistoryRespository.Edit(bookingHistory);
 
                 result.IsSuccess = true;
                 result.Data = "Delete Sucessfuly";

@@ -1,7 +1,8 @@
-﻿using MayNghien.Models.Request.Base;
+﻿using AirlineTickets.Model.Dto;
+using MayNghien.Models.Request.Base;
 using MayNghien.Models.Response.Base;
 using Microsoft.AspNetCore.Identity;
-using QuanLyNhanSuBackEnd.Model.Dto;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,7 @@ namespace AirlineTickets.Service.Contract
         public Task<AppResponse<string>> EditUser(UserModel model);
         public Task<AppResponse<SearchResponse<UserModel>>> Search(SearchRequest request);
 
-
+        public Task<AppResponse<List<UserModel>>> GetAllUser();
         public Task<AppResponse<UserModel>> GetUser(string email);
         public Task<AppResponse<IdentityUser>> GetUserIdentity(string Id);
     }

@@ -1,8 +1,9 @@
-﻿using AirlineTickets.Service.Contract;
+﻿using AirlineTickets.Model.Dto;
+using AirlineTickets.Service.Contract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using QuanLyNhanSuBackEnd.Model.Dto;
+
 
 namespace AirlineTickets.API.Controllers
 {

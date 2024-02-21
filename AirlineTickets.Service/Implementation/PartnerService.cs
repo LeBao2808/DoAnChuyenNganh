@@ -117,7 +117,12 @@ namespace AirlineTickets.Service.Implementation
                 var list = query.Where(x => x.IsDeleted == false).Select(m => new PartnerDto
                 {
                     Id = m.Id,
-                    
+                    Address = m.Address,
+                    Email = m.Email,
+                    Information = m.Information,
+                    LoGo = m.LoGo,
+                    Name = m.Name,
+                    PhoneNumber = m.PhoneNumber,
 
                 }).ToList();
                 result.IsSuccess = true;
