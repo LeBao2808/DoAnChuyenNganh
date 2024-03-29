@@ -16,21 +16,21 @@ using System.Threading.Tasks;
 
 namespace AirlineTickets.Service.Implementation
 {
-    public class FeedbackAndReviewsService:IFeedbackAndReviewsService
+    public class LuggagesService : ILuggagesService
     {
-        private readonly IFeedbackAndReviewsRespository _feedbackAndReviewsRespository;
+        private readonly ILuggagesRespository _luggagesRespository;
         private readonly IMapper _mapper;
         private IHttpContextAccessor _httpContextAccessor;
-        public FeedbackAndReviewsService(IFeedbackAndReviewsRespository BoPhanRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        public LuggagesService(ILuggagesRespository BoPhanRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
-            _feedbackAndReviewsRespository = BoPhanRepository;
+            _luggagesRespository = BoPhanRepository;
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public AppResponse<FeedbackAndReviewsDto> Create(FeedbackAndReviewsDto request)
+        public AppResponse<LuggagesDto> Create(LuggagesDto request)
         {
-            var result = new AppResponse<FeedbackAndReviewsDto>();
+            var result = new AppResponse<LuggagesDto>();
             try
             {
                 var UserName = ClaimHelper.GetClainByName(_httpContextAccessor, "UserName");
@@ -38,12 +38,12 @@ namespace AirlineTickets.Service.Implementation
                 {
                     return result.BuildError("Cannot find Account by this user");
                 }
-                var tuyendung = new FeedbackAndReviews();
-                tuyendung = _mapper.Map<FeedbackAndReviews>(request);
+                var tuyendung = new Luggages();
+                tuyendung = _mapper.Map<Luggages>(request);
                 tuyendung.Id = Guid.NewGuid();
                 tuyendung.CreatedBy = UserName;
 
-                _feedbackAndReviewsRespository.Add(tuyendung);
+                _luggagesRespository.Add(tuyendung);
 
                 request.Id = tuyendung.Id;
                 result.IsSuccess = true;
@@ -63,11 +63,11 @@ namespace AirlineTickets.Service.Implementation
             var result = new AppResponse<string>();
             try
             {
-                var tuyendung = new FeedbackAndReviews();
-                tuyendung = _feedbackAndReviewsRespository.Get(Id);
+                var tuyendung = new Luggages();
+                tuyendung = _luggagesRespository.Get(Id);
                 tuyendung.IsDeleted = true;
 
-                _feedbackAndReviewsRespository.Edit(tuyendung);
+                _luggagesRespository.Edit(tuyendung);
 
                 result.IsSuccess = true;
                 result.Data = "Delete Sucessfuly";
@@ -84,16 +84,16 @@ namespace AirlineTickets.Service.Implementation
 
 
 
-        public AppResponse<FeedbackAndReviewsDto> Edit(FeedbackAndReviewsDto tuyendung)
+        public AppResponse<LuggagesDto> Edit(LuggagesDto tuyendung)
         {
-            var result = new AppResponse<FeedbackAndReviewsDto>();
+            var result = new AppResponse<LuggagesDto>();
             try
             {
                 //var UserName = ClaimHelper.GetClainByName(_httpContextAccessor, "UserName");
-                var request = new FeedbackAndReviews();
-                request = _mapper.Map<FeedbackAndReviews>(tuyendung);
+                var request = new Luggages();
+                request = _mapper.Map<Luggages>(tuyendung);
                 //request.CreatedBy = UserName;
-                _feedbackAndReviewsRespository.Edit(request);
+                _luggagesRespository.Edit(request);
 
                 result.IsSuccess = true;
                 result.Data = tuyendung;
@@ -107,23 +107,19 @@ namespace AirlineTickets.Service.Implementation
             }
         }
 
-        public AppResponse<List<FeedbackAndReviewsDto>> GetAll()
+        public AppResponse<List<LuggagesDto>> GetAll()
         {
-            var result = new AppResponse<List<FeedbackAndReviewsDto>>();
+            var result = new AppResponse<List<LuggagesDto>>();
             //string userId = "";
             try
             {
-                var query = _feedbackAndReviewsRespository.GetAll().Where(x => x.IsDeleted == false);
-                var list = query.Where(x => x.IsDeleted == false).Select(m => new FeedbackAndReviewsDto
+                var query = _luggagesRespository.GetAll().Where(x => x.IsDeleted == false);
+                var list = query.Where(x => x.IsDeleted == false).Select(m => new LuggagesDto
                 {
                     Id = m.Id,
-                    CustomersId = m.CustomersId,
-                    Feedback = m.Feedback,
-                    FlightsId = m.FlightsId,
-                    PointEvaluation = m.PointEvaluation,
-                    ReactionTime = m.ReactionTime,
-                    
-
+                   name = m.name,
+                   description = m.description,
+                   Price = m.Price
                 }).ToList();
                 result.IsSuccess = true;
                 result.Data = list;
@@ -139,13 +135,13 @@ namespace AirlineTickets.Service.Implementation
 
 
 
-        public AppResponse<FeedbackAndReviewsDto> GetId(Guid Id)
+        public AppResponse<LuggagesDto> GetId(Guid Id)
         {
-            var result = new AppResponse<FeedbackAndReviewsDto>();
+            var result = new AppResponse<LuggagesDto>();
             try
             {
-                var tuyendung = _feedbackAndReviewsRespository.Get(Id);
-                var data = _mapper.Map<FeedbackAndReviewsDto>(tuyendung);
+                var tuyendung = _luggagesRespository.Get(Id);
+                var data = _mapper.Map<LuggagesDto>(tuyendung);
                 result.IsSuccess = true;
                 result.Data = data;
                 return result;
@@ -158,20 +154,20 @@ namespace AirlineTickets.Service.Implementation
 
             }
         }
-        private ExpressionStarter<FeedbackAndReviews> BuildFilterExpression(IList<Filter> Filters)
+        private ExpressionStarter<Luggages> BuildFilterExpression(IList<Filter> Filters)
         {
             try
             {
-                var predicate = PredicateBuilder.New<FeedbackAndReviews>(true);
+                var predicate = PredicateBuilder.New<Luggages>(true);
                 if (Filters != null)
                 {
                     foreach (var filter in Filters)
                     {
                         switch (filter.FieldName)
                         {
-                            case "customersId":
-                                predicate = predicate.And(m => m.CustomersId.ToString().Contains(filter.Value));
-                                break;
+                            //case "customersId":
+                            //    predicate = predicate.And(m => m.CustomersId.ToString().Contains(filter.Value));
+                            //    break;
 
                             default:
                                 break;
@@ -188,30 +184,22 @@ namespace AirlineTickets.Service.Implementation
             }
         }
 
-        public async Task<AppResponse<SearchResponse<FeedbackAndReviewsDto>>> Search(SearchRequest request)
+        public async Task<AppResponse<SearchResponse<LuggagesDto>>> Search(SearchRequest request)
         {
-            var result = new AppResponse<SearchResponse<FeedbackAndReviewsDto>>();
+            var result = new AppResponse<SearchResponse<LuggagesDto>>();
             try
             {
                 var query = BuildFilterExpression(request.Filters);
-                var numOfRecords = _feedbackAndReviewsRespository.CountRecordsByPredicate(query);
+                var numOfRecords = _luggagesRespository.CountRecordsByPredicate(query);
 
-                var users = _feedbackAndReviewsRespository.FindByPredicate(query);
+                var users = _luggagesRespository.FindByPredicate(query);
                 int pageIndex = request.PageIndex ?? 1;
                 int pageSize = request.PageSize ?? 1;
                 int startIndex = (pageIndex - 1) * (int)pageSize;
                 var UserList = users.Skip(startIndex).Take(pageSize).ToList();
-                var dtoList = _mapper.Map<List<FeedbackAndReviewsDto>>(UserList);
-                //if (dtoList != null && dtoList.Count > 0)
-                //{
-                //    for (int i = 0; i < UserList.Count; i++)
-                //    {
-                //        var dtouser = dtoList[i];
-                //        var identityUser = UserList[i];
-                //        dtouser.Role = (await _userManager.GetRolesAsync(identityUser)).First();
-                //    }
-                //}
-                var searchUserResult = new SearchResponse<FeedbackAndReviewsDto>
+                var dtoList = _mapper.Map<List<LuggagesDto>>(UserList);
+
+                var searchUserResult = new SearchResponse<LuggagesDto>
                 {
                     TotalRows = numOfRecords,
                     TotalPages = SearchHelper.CalculateNumOfPages(numOfRecords, pageSize),

@@ -20,14 +20,16 @@ namespace AirlineTickets.DAL.Models.Context
         {
 
         }
-        public DbSet<BookingHistory> BookingsHistory { get; set; }
-        public DbSet<BookTickets> BookTickets { get; set; }
+        public DbSet<Bookings> Bookings { get; set; }
+        public DbSet<Tickets> Tickets{ get; set; }
         public DbSet<Customers> Customers { get; set; }
         public DbSet<FeedbackAndReviews> FeedbackAndReviews { get; set; }
-        public DbSet<Flight> Flight { get; set; }
-        public DbSet<Partner> Partner { get; set; }
-        public DbSet<Pay> Pay { get; set; } 
-        public DbSet<Promotion> Promotion { get; set; } 
+        public DbSet<Flights> Flights { get; set; }
+        public DbSet<AirplaneSeats> AirplaneSeats { get; set; }
+        public DbSet<Luggages> Luggages { get; set; }
+        public DbSet<Airlines> Airlines { get; set; }
+        public DbSet<Payments> Payments { get; set; } 
+        public DbSet<Promotions> Promotions { get; set; } 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)

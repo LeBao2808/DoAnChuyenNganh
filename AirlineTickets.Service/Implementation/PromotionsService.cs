@@ -16,21 +16,21 @@ using System.Threading.Tasks;
 
 namespace AirlineTickets.Service.Implementation
 {
-    public class FeedbackAndReviewsService:IFeedbackAndReviewsService
+    public class PromotionsService : IPromotionsService
     {
-        private readonly IFeedbackAndReviewsRespository _feedbackAndReviewsRespository;
+        private readonly IPromotionsRespository _promotionRespository;
         private readonly IMapper _mapper;
         private IHttpContextAccessor _httpContextAccessor;
-        public FeedbackAndReviewsService(IFeedbackAndReviewsRespository BoPhanRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        public PromotionsService(IPromotionsRespository BoPhanRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
-            _feedbackAndReviewsRespository = BoPhanRepository;
+            _promotionRespository = BoPhanRepository;
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public AppResponse<FeedbackAndReviewsDto> Create(FeedbackAndReviewsDto request)
+        public AppResponse<PromotionsDto> Create(PromotionsDto request)
         {
-            var result = new AppResponse<FeedbackAndReviewsDto>();
+            var result = new AppResponse<PromotionsDto>();
             try
             {
                 var UserName = ClaimHelper.GetClainByName(_httpContextAccessor, "UserName");
@@ -38,12 +38,12 @@ namespace AirlineTickets.Service.Implementation
                 {
                     return result.BuildError("Cannot find Account by this user");
                 }
-                var tuyendung = new FeedbackAndReviews();
-                tuyendung = _mapper.Map<FeedbackAndReviews>(request);
+                var tuyendung = new Promotions();
+                tuyendung = _mapper.Map<Promotions>(request);
                 tuyendung.Id = Guid.NewGuid();
                 tuyendung.CreatedBy = UserName;
 
-                _feedbackAndReviewsRespository.Add(tuyendung);
+                _promotionRespository.Add(tuyendung);
 
                 request.Id = tuyendung.Id;
                 result.IsSuccess = true;
@@ -63,11 +63,11 @@ namespace AirlineTickets.Service.Implementation
             var result = new AppResponse<string>();
             try
             {
-                var tuyendung = new FeedbackAndReviews();
-                tuyendung = _feedbackAndReviewsRespository.Get(Id);
+                var tuyendung = new Promotions();
+                tuyendung = _promotionRespository.Get(Id);
                 tuyendung.IsDeleted = true;
 
-                _feedbackAndReviewsRespository.Edit(tuyendung);
+                _promotionRespository.Edit(tuyendung);
 
                 result.IsSuccess = true;
                 result.Data = "Delete Sucessfuly";
@@ -84,16 +84,16 @@ namespace AirlineTickets.Service.Implementation
 
 
 
-        public AppResponse<FeedbackAndReviewsDto> Edit(FeedbackAndReviewsDto tuyendung)
+        public AppResponse<PromotionsDto> Edit(PromotionsDto tuyendung)
         {
-            var result = new AppResponse<FeedbackAndReviewsDto>();
+            var result = new AppResponse<PromotionsDto>();
             try
             {
                 //var UserName = ClaimHelper.GetClainByName(_httpContextAccessor, "UserName");
-                var request = new FeedbackAndReviews();
-                request = _mapper.Map<FeedbackAndReviews>(tuyendung);
+                var request = new Promotions();
+                request = _mapper.Map<Promotions>(tuyendung);
                 //request.CreatedBy = UserName;
-                _feedbackAndReviewsRespository.Edit(request);
+                _promotionRespository.Edit(request);
 
                 result.IsSuccess = true;
                 result.Data = tuyendung;
@@ -107,22 +107,22 @@ namespace AirlineTickets.Service.Implementation
             }
         }
 
-        public AppResponse<List<FeedbackAndReviewsDto>> GetAll()
+        public AppResponse<List<PromotionsDto>> GetAll()
         {
-            var result = new AppResponse<List<FeedbackAndReviewsDto>>();
+            var result = new AppResponse<List<PromotionsDto>>();
             //string userId = "";
             try
             {
-                var query = _feedbackAndReviewsRespository.GetAll().Where(x => x.IsDeleted == false);
-                var list = query.Where(x => x.IsDeleted == false).Select(m => new FeedbackAndReviewsDto
+                var query = _promotionRespository.GetAll().Where(x => x.IsDeleted == false);
+                var list = query.Where(x => x.IsDeleted == false).Select(m => new PromotionsDto
                 {
                     Id = m.Id,
-                    CustomersId = m.CustomersId,
-                    Feedback = m.Feedback,
-                    FlightsId = m.FlightsId,
-                    PointEvaluation = m.PointEvaluation,
-                    ReactionTime = m.ReactionTime,
-                    
+                   CustomersId = m.CustomersId,
+                   Name = m.Name,
+                   NumberOfSeats = m.NumberOfSeats,
+                   PromotionInformation = m.PromotionInformation,
+                   PromotionType = m.PromotionType,
+                   Stastus = m.Stastus,
 
                 }).ToList();
                 result.IsSuccess = true;
@@ -139,13 +139,13 @@ namespace AirlineTickets.Service.Implementation
 
 
 
-        public AppResponse<FeedbackAndReviewsDto> GetId(Guid Id)
+        public AppResponse<PromotionsDto> GetId(Guid Id)
         {
-            var result = new AppResponse<FeedbackAndReviewsDto>();
+            var result = new AppResponse<PromotionsDto>();
             try
             {
-                var tuyendung = _feedbackAndReviewsRespository.Get(Id);
-                var data = _mapper.Map<FeedbackAndReviewsDto>(tuyendung);
+                var tuyendung = _promotionRespository.Get(Id);
+                var data = _mapper.Map<PromotionsDto>(tuyendung);
                 result.IsSuccess = true;
                 result.Data = data;
                 return result;
@@ -158,19 +158,19 @@ namespace AirlineTickets.Service.Implementation
 
             }
         }
-        private ExpressionStarter<FeedbackAndReviews> BuildFilterExpression(IList<Filter> Filters)
+        private ExpressionStarter<Promotions> BuildFilterExpression(IList<Filter> Filters)
         {
             try
             {
-                var predicate = PredicateBuilder.New<FeedbackAndReviews>(true);
+                var predicate = PredicateBuilder.New<Promotions>(true);
                 if (Filters != null)
                 {
                     foreach (var filter in Filters)
                     {
                         switch (filter.FieldName)
                         {
-                            case "customersId":
-                                predicate = predicate.And(m => m.CustomersId.ToString().Contains(filter.Value));
+                            case "name":
+                                predicate = predicate.And(m => m.Name.Contains(filter.Value));
                                 break;
 
                             default:
@@ -188,30 +188,22 @@ namespace AirlineTickets.Service.Implementation
             }
         }
 
-        public async Task<AppResponse<SearchResponse<FeedbackAndReviewsDto>>> Search(SearchRequest request)
+        public async Task<AppResponse<SearchResponse<PromotionsDto>>> Search(SearchRequest request)
         {
-            var result = new AppResponse<SearchResponse<FeedbackAndReviewsDto>>();
+            var result = new AppResponse<SearchResponse<PromotionsDto>>();
             try
             {
                 var query = BuildFilterExpression(request.Filters);
-                var numOfRecords = _feedbackAndReviewsRespository.CountRecordsByPredicate(query);
+                var numOfRecords = _promotionRespository.CountRecordsByPredicate(query);
 
-                var users = _feedbackAndReviewsRespository.FindByPredicate(query);
+                var users = _promotionRespository.FindByPredicate(query);
                 int pageIndex = request.PageIndex ?? 1;
                 int pageSize = request.PageSize ?? 1;
                 int startIndex = (pageIndex - 1) * (int)pageSize;
                 var UserList = users.Skip(startIndex).Take(pageSize).ToList();
-                var dtoList = _mapper.Map<List<FeedbackAndReviewsDto>>(UserList);
-                //if (dtoList != null && dtoList.Count > 0)
-                //{
-                //    for (int i = 0; i < UserList.Count; i++)
-                //    {
-                //        var dtouser = dtoList[i];
-                //        var identityUser = UserList[i];
-                //        dtouser.Role = (await _userManager.GetRolesAsync(identityUser)).First();
-                //    }
-                //}
-                var searchUserResult = new SearchResponse<FeedbackAndReviewsDto>
+                var dtoList = _mapper.Map<List<PromotionsDto>>(UserList);
+               
+                var searchUserResult = new SearchResponse<PromotionsDto>
                 {
                     TotalRows = numOfRecords,
                     TotalPages = SearchHelper.CalculateNumOfPages(numOfRecords, pageSize),

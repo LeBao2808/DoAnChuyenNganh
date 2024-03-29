@@ -1,19 +1,19 @@
-﻿using MayNghien.Common.Models;
+﻿using MayNghien.Common.Models.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AirlineTickets.Model.Dto
+namespace AirlineTickets.DAL.Models.Entity
 {
-    public class CustomersDto : BaseDto
+    public class Airlines : BaseEntity
     {
-        public string? Name { get; set; }
+        public string? Name { get; set; }   
+        public string? Information {  get; set; }
+        public string? LoGo {  get; set; }
         public string? Address { get; set; }
         public string? Email { get; set; }
         public string? PhoneNumber { get; set; }
-        public string? Passport { get; set; }
-        public bool? Gender { get; set; }
     }
 }

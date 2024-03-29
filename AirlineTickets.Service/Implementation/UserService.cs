@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -309,16 +310,22 @@ namespace AirlineTickets.Service.Implementation
                 int pageSize = request.PageSize ?? 1;
                 int startIndex = (pageIndex - 1) * (int)pageSize;
                 var UserList = users.Skip(startIndex).Take(pageSize).ToList();
-                var dtoList = _mapper.Map<List<UserModel>>(UserList);
-                //if (dtoList != null && dtoList.Count > 0)
-                //{
-                //    for (int i = 0; i < UserList.Count; i++)
-                //    {
-                //        var dtouser = dtoList[i];
-                //        var identityUser = UserList[i];
-                //        dtouser.Role = (await _userManager.GetRolesAsync(identityUser)).First();
-                //    }
-                //}
+                var dtoList = new List<UserModel>();
+                foreach (var user in UserList)
+                {
+                    var userModel = new UserModel
+                    {
+                        UserName = user.UserName,
+                        Email = user.Email,
+                        passwordHash = user.PasswordHash,
+                    };
+
+                  
+                    var roles = await _userManager.GetRolesAsync(user);
+                    userModel.Role = roles.FirstOrDefault();
+
+                    dtoList.Add(userModel);
+                }
                 var searchUserResult = new SearchResponse<UserModel>
                 {
                     TotalRows = numOfRecords,

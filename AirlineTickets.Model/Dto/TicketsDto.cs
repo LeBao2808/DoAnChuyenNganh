@@ -7,12 +7,9 @@ using System.Threading.Tasks;
 
 namespace AirlineTickets.Model.Dto
 {
-    public class FeedbackAndReviewsDto : BaseDto
+   public class TicketsDto:BaseDto
     {
-        public Guid CustomersId { get; set; }
         public Guid FlightsId { get; set; }
-        public string? Feedback { get; set; }
-        public double? PointEvaluation { get; set; }
-        public DateTime? ReactionTime { get; set; }
+        public double? Price { get; set; }
     }
 }

@@ -16,21 +16,21 @@ using System.Threading.Tasks;
 
 namespace AirlineTickets.Service.Implementation
 {
-    public class FeedbackAndReviewsService:IFeedbackAndReviewsService
+    public class PaymentsService : IPaymentsService
     {
-        private readonly IFeedbackAndReviewsRespository _feedbackAndReviewsRespository;
+        private readonly IPaymentsRespository _payRespository;
         private readonly IMapper _mapper;
         private IHttpContextAccessor _httpContextAccessor;
-        public FeedbackAndReviewsService(IFeedbackAndReviewsRespository BoPhanRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        public PaymentsService(IPaymentsRespository BoPhanRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
-            _feedbackAndReviewsRespository = BoPhanRepository;
+            _payRespository = BoPhanRepository;
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public AppResponse<FeedbackAndReviewsDto> Create(FeedbackAndReviewsDto request)
+        public AppResponse<PaymentsDto> Create(PaymentsDto request)
         {
-            var result = new AppResponse<FeedbackAndReviewsDto>();
+            var result = new AppResponse<PaymentsDto>();
             try
             {
                 var UserName = ClaimHelper.GetClainByName(_httpContextAccessor, "UserName");
@@ -38,12 +38,12 @@ namespace AirlineTickets.Service.Implementation
                 {
                     return result.BuildError("Cannot find Account by this user");
                 }
-                var tuyendung = new FeedbackAndReviews();
-                tuyendung = _mapper.Map<FeedbackAndReviews>(request);
+                var tuyendung = new Payments();
+                tuyendung = _mapper.Map<Payments>(request);
                 tuyendung.Id = Guid.NewGuid();
                 tuyendung.CreatedBy = UserName;
 
-                _feedbackAndReviewsRespository.Add(tuyendung);
+                _payRespository.Add(tuyendung);
 
                 request.Id = tuyendung.Id;
                 result.IsSuccess = true;
@@ -63,11 +63,11 @@ namespace AirlineTickets.Service.Implementation
             var result = new AppResponse<string>();
             try
             {
-                var tuyendung = new FeedbackAndReviews();
-                tuyendung = _feedbackAndReviewsRespository.Get(Id);
+                var tuyendung = new Payments();
+                tuyendung = _payRespository.Get(Id);
                 tuyendung.IsDeleted = true;
 
-                _feedbackAndReviewsRespository.Edit(tuyendung);
+                _payRespository.Edit(tuyendung);
 
                 result.IsSuccess = true;
                 result.Data = "Delete Sucessfuly";
@@ -84,16 +84,16 @@ namespace AirlineTickets.Service.Implementation
 
 
 
-        public AppResponse<FeedbackAndReviewsDto> Edit(FeedbackAndReviewsDto tuyendung)
+        public AppResponse<PaymentsDto> Edit(PaymentsDto tuyendung)
         {
-            var result = new AppResponse<FeedbackAndReviewsDto>();
+            var result = new AppResponse<PaymentsDto>();
             try
             {
                 //var UserName = ClaimHelper.GetClainByName(_httpContextAccessor, "UserName");
-                var request = new FeedbackAndReviews();
-                request = _mapper.Map<FeedbackAndReviews>(tuyendung);
+                var request = new Payments();
+                request = _mapper.Map<Payments>(tuyendung);
                 //request.CreatedBy = UserName;
-                _feedbackAndReviewsRespository.Edit(request);
+                _payRespository.Edit(request);
 
                 result.IsSuccess = true;
                 result.Data = tuyendung;
@@ -107,22 +107,21 @@ namespace AirlineTickets.Service.Implementation
             }
         }
 
-        public AppResponse<List<FeedbackAndReviewsDto>> GetAll()
+        public AppResponse<List<PaymentsDto>> GetAll()
         {
-            var result = new AppResponse<List<FeedbackAndReviewsDto>>();
+            var result = new AppResponse<List<PaymentsDto>>();
             //string userId = "";
             try
             {
-                var query = _feedbackAndReviewsRespository.GetAll().Where(x => x.IsDeleted == false);
-                var list = query.Where(x => x.IsDeleted == false).Select(m => new FeedbackAndReviewsDto
+                var query = _payRespository.GetAll().Where(x => x.IsDeleted == false);
+                var list = query.Where(x => x.IsDeleted == false).Select(m => new PaymentsDto
                 {
                     Id = m.Id,
-                    CustomersId = m.CustomersId,
-                    Feedback = m.Feedback,
-                    FlightsId = m.FlightsId,
-                    PointEvaluation = m.PointEvaluation,
-                    ReactionTime = m.ReactionTime,
-                    
+                  PaymentStatus = m.PaymentStatus,
+                  
+                  PayAmount = m.PayAmount,
+                  PayDate = m.PayDate,
+                  PaymentMethods = m.PaymentMethods,
 
                 }).ToList();
                 result.IsSuccess = true;
@@ -139,13 +138,13 @@ namespace AirlineTickets.Service.Implementation
 
 
 
-        public AppResponse<FeedbackAndReviewsDto> GetId(Guid Id)
+        public AppResponse<PaymentsDto> GetId(Guid Id)
         {
-            var result = new AppResponse<FeedbackAndReviewsDto>();
+            var result = new AppResponse<PaymentsDto>();
             try
             {
-                var tuyendung = _feedbackAndReviewsRespository.Get(Id);
-                var data = _mapper.Map<FeedbackAndReviewsDto>(tuyendung);
+                var tuyendung = _payRespository.Get(Id);
+                var data = _mapper.Map<PaymentsDto>(tuyendung);
                 result.IsSuccess = true;
                 result.Data = data;
                 return result;
@@ -158,20 +157,20 @@ namespace AirlineTickets.Service.Implementation
 
             }
         }
-        private ExpressionStarter<FeedbackAndReviews> BuildFilterExpression(IList<Filter> Filters)
+        private ExpressionStarter<Payments> BuildFilterExpression(IList<Filter> Filters)
         {
             try
             {
-                var predicate = PredicateBuilder.New<FeedbackAndReviews>(true);
+                var predicate = PredicateBuilder.New<Payments>(true);
                 if (Filters != null)
                 {
                     foreach (var filter in Filters)
                     {
                         switch (filter.FieldName)
                         {
-                            case "customersId":
-                                predicate = predicate.And(m => m.CustomersId.ToString().Contains(filter.Value));
-                                break;
+                            //case "customersId":
+                            //    predicate = predicate.And(m => m.CustomersId.ToString().Contains(filter.Value));
+                            //    break;
 
                             default:
                                 break;
@@ -188,30 +187,22 @@ namespace AirlineTickets.Service.Implementation
             }
         }
 
-        public async Task<AppResponse<SearchResponse<FeedbackAndReviewsDto>>> Search(SearchRequest request)
+        public async Task<AppResponse<SearchResponse<PaymentsDto>>> Search(SearchRequest request)
         {
-            var result = new AppResponse<SearchResponse<FeedbackAndReviewsDto>>();
+            var result = new AppResponse<SearchResponse<PaymentsDto>>();
             try
             {
                 var query = BuildFilterExpression(request.Filters);
-                var numOfRecords = _feedbackAndReviewsRespository.CountRecordsByPredicate(query);
+                var numOfRecords = _payRespository.CountRecordsByPredicate(query);
 
-                var users = _feedbackAndReviewsRespository.FindByPredicate(query);
+                var users = _payRespository.FindByPredicate(query);
                 int pageIndex = request.PageIndex ?? 1;
                 int pageSize = request.PageSize ?? 1;
                 int startIndex = (pageIndex - 1) * (int)pageSize;
                 var UserList = users.Skip(startIndex).Take(pageSize).ToList();
-                var dtoList = _mapper.Map<List<FeedbackAndReviewsDto>>(UserList);
-                //if (dtoList != null && dtoList.Count > 0)
-                //{
-                //    for (int i = 0; i < UserList.Count; i++)
-                //    {
-                //        var dtouser = dtoList[i];
-                //        var identityUser = UserList[i];
-                //        dtouser.Role = (await _userManager.GetRolesAsync(identityUser)).First();
-                //    }
-                //}
-                var searchUserResult = new SearchResponse<FeedbackAndReviewsDto>
+                var dtoList = _mapper.Map<List<PaymentsDto>>(UserList);
+                
+                var searchUserResult = new SearchResponse<PaymentsDto>
                 {
                     TotalRows = numOfRecords,
                     TotalPages = SearchHelper.CalculateNumOfPages(numOfRecords, pageSize),

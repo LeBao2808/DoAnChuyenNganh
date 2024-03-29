@@ -1,4 +1,5 @@
 ﻿using AirlineTickets.DAL.Contract;
+using AirlineTickets.DAL.Implementation;
 using AirlineTickets.DAL.Models.Entity;
 using AirlineTickets.Model.Dto;
 using AirlineTickets.Service.Contract;
@@ -16,36 +17,49 @@ using System.Threading.Tasks;
 
 namespace AirlineTickets.Service.Implementation
 {
-    public class FeedbackAndReviewsService:IFeedbackAndReviewsService
+    public class BookingsService : IBookingsService
     {
-        private readonly IFeedbackAndReviewsRespository _feedbackAndReviewsRespository;
+        private readonly IBookingsRespository _bookTicketsRespository;
         private readonly IMapper _mapper;
         private IHttpContextAccessor _httpContextAccessor;
-        public FeedbackAndReviewsService(IFeedbackAndReviewsRespository BoPhanRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        private readonly ICustomersRespository _CustomersRespository;
+        public BookingsService(IBookingsRespository BoPhanRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor , ICustomersRespository customersRespository)
         {
-            _feedbackAndReviewsRespository = BoPhanRepository;
+            _bookTicketsRespository = BoPhanRepository;
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
+            _CustomersRespository = customersRespository;
         }
 
-        public AppResponse<FeedbackAndReviewsDto> Create(FeedbackAndReviewsDto request)
+        public AppResponse<BookingsDto> Create(BookingsDto request)
         {
-            var result = new AppResponse<FeedbackAndReviewsDto>();
+            var result = new AppResponse<BookingsDto>();
             try
             {
                 var UserName = ClaimHelper.GetClainByName(_httpContextAccessor, "UserName");
                 if (UserName == null)
-                {
                     return result.BuildError("Cannot find Account by this user");
-                }
-                var tuyendung = new FeedbackAndReviews();
-                tuyendung = _mapper.Map<FeedbackAndReviews>(request);
-                tuyendung.Id = Guid.NewGuid();
-                tuyendung.CreatedBy = UserName;
 
-                _feedbackAndReviewsRespository.Add(tuyendung);
+                var Customer = _mapper.Map<Customers>(request.Customers);
+                Customer.Id = new Guid();
+                _CustomersRespository.Add(Customer);
 
-                request.Id = tuyendung.Id;
+                var bookTickets = new Bookings
+                {
+                   TicketsId = request.TicketsId,
+                    CustomersId = Customer.Id,
+                    CorrespondingTicketPrices = request.CorrespondingTicketPrices,
+                    BookingDate = request.BookingDate,
+                    Quantity = request.Quantity,
+                    TicketBookingStatus = request.TicketBookingStatus,
+                    LuggagesId = request.LuggagesId,
+                    CreatedBy = UserName
+                };
+    
+                bookTickets.Id = new Guid();
+                _bookTicketsRespository.Add(bookTickets);
+
+                
                 result.IsSuccess = true;
                 result.Data = request;
                 return result;
@@ -63,11 +77,11 @@ namespace AirlineTickets.Service.Implementation
             var result = new AppResponse<string>();
             try
             {
-                var tuyendung = new FeedbackAndReviews();
-                tuyendung = _feedbackAndReviewsRespository.Get(Id);
-                tuyendung.IsDeleted = true;
+                var bookTickets = new Bookings();
+                bookTickets = _bookTicketsRespository.Get(Id);
+                bookTickets.IsDeleted = true;
 
-                _feedbackAndReviewsRespository.Edit(tuyendung);
+                _bookTicketsRespository.Edit(bookTickets);
 
                 result.IsSuccess = true;
                 result.Data = "Delete Sucessfuly";
@@ -84,16 +98,16 @@ namespace AirlineTickets.Service.Implementation
 
 
 
-        public AppResponse<FeedbackAndReviewsDto> Edit(FeedbackAndReviewsDto tuyendung)
+        public AppResponse<BookingsDto> Edit(BookingsDto tuyendung)
         {
-            var result = new AppResponse<FeedbackAndReviewsDto>();
+            var result = new AppResponse<BookingsDto>();
             try
             {
                 //var UserName = ClaimHelper.GetClainByName(_httpContextAccessor, "UserName");
-                var request = new FeedbackAndReviews();
-                request = _mapper.Map<FeedbackAndReviews>(tuyendung);
+                var request = new Bookings();
+                request = _mapper.Map<Bookings>(tuyendung);
                 //request.CreatedBy = UserName;
-                _feedbackAndReviewsRespository.Edit(request);
+                _bookTicketsRespository.Edit(request);
 
                 result.IsSuccess = true;
                 result.Data = tuyendung;
@@ -107,21 +121,16 @@ namespace AirlineTickets.Service.Implementation
             }
         }
 
-        public AppResponse<List<FeedbackAndReviewsDto>> GetAll()
+        public AppResponse<List<BookingsDto>> GetAll()
         {
-            var result = new AppResponse<List<FeedbackAndReviewsDto>>();
+            var result = new AppResponse<List<BookingsDto>>();
             //string userId = "";
             try
             {
-                var query = _feedbackAndReviewsRespository.GetAll().Where(x => x.IsDeleted == false);
-                var list = query.Where(x => x.IsDeleted == false).Select(m => new FeedbackAndReviewsDto
+                var query = _bookTicketsRespository.GetAll().Where(x => x.IsDeleted == false);
+                var list = query.Where(x => x.IsDeleted == false).Select(m => new BookingsDto
                 {
                     Id = m.Id,
-                    CustomersId = m.CustomersId,
-                    Feedback = m.Feedback,
-                    FlightsId = m.FlightsId,
-                    PointEvaluation = m.PointEvaluation,
-                    ReactionTime = m.ReactionTime,
                     
 
                 }).ToList();
@@ -139,13 +148,13 @@ namespace AirlineTickets.Service.Implementation
 
 
 
-        public AppResponse<FeedbackAndReviewsDto> GetId(Guid Id)
+        public AppResponse<BookingsDto> GetId(Guid Id)
         {
-            var result = new AppResponse<FeedbackAndReviewsDto>();
+            var result = new AppResponse<BookingsDto>();
             try
             {
-                var tuyendung = _feedbackAndReviewsRespository.Get(Id);
-                var data = _mapper.Map<FeedbackAndReviewsDto>(tuyendung);
+                var bookTickets = _bookTicketsRespository.Get(Id);
+                var data = _mapper.Map<BookingsDto>(bookTickets);
                 result.IsSuccess = true;
                 result.Data = data;
                 return result;
@@ -158,11 +167,11 @@ namespace AirlineTickets.Service.Implementation
 
             }
         }
-        private ExpressionStarter<FeedbackAndReviews> BuildFilterExpression(IList<Filter> Filters)
+        private ExpressionStarter<Bookings> BuildFilterExpression(IList<Filter> Filters)
         {
             try
             {
-                var predicate = PredicateBuilder.New<FeedbackAndReviews>(true);
+                var predicate = PredicateBuilder.New<Bookings>(true);
                 if (Filters != null)
                 {
                     foreach (var filter in Filters)
@@ -188,20 +197,20 @@ namespace AirlineTickets.Service.Implementation
             }
         }
 
-        public async Task<AppResponse<SearchResponse<FeedbackAndReviewsDto>>> Search(SearchRequest request)
+        public async Task<AppResponse<SearchResponse<BookingsDto>>> Search(SearchRequest request)
         {
-            var result = new AppResponse<SearchResponse<FeedbackAndReviewsDto>>();
+            var result = new AppResponse<SearchResponse<BookingsDto>>();
             try
             {
                 var query = BuildFilterExpression(request.Filters);
-                var numOfRecords = _feedbackAndReviewsRespository.CountRecordsByPredicate(query);
+                var numOfRecords = _bookTicketsRespository.CountRecordsByPredicate(query);
 
-                var users = _feedbackAndReviewsRespository.FindByPredicate(query);
+                var users = _bookTicketsRespository.FindByPredicate(query);
                 int pageIndex = request.PageIndex ?? 1;
                 int pageSize = request.PageSize ?? 1;
                 int startIndex = (pageIndex - 1) * (int)pageSize;
                 var UserList = users.Skip(startIndex).Take(pageSize).ToList();
-                var dtoList = _mapper.Map<List<FeedbackAndReviewsDto>>(UserList);
+                var dtoList = _mapper.Map<List<BookingsDto>>(UserList);
                 //if (dtoList != null && dtoList.Count > 0)
                 //{
                 //    for (int i = 0; i < UserList.Count; i++)
@@ -211,7 +220,7 @@ namespace AirlineTickets.Service.Implementation
                 //        dtouser.Role = (await _userManager.GetRolesAsync(identityUser)).First();
                 //    }
                 //}
-                var searchUserResult = new SearchResponse<FeedbackAndReviewsDto>
+                var searchUserResult = new SearchResponse<BookingsDto>
                 {
                     TotalRows = numOfRecords,
                     TotalPages = SearchHelper.CalculateNumOfPages(numOfRecords, pageSize),
@@ -231,6 +240,7 @@ namespace AirlineTickets.Service.Implementation
                 return result.BuildError(ex.ToString());
             }
         }
+
 
     }
 }
