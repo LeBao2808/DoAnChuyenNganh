@@ -31,6 +31,7 @@ namespace AirlineTickets.Service.Mapper
             CreateMap<Promotions, PromotionsDto>().ReverseMap();
             CreateMap<Tickets, TicketsDto>().ReverseMap();
             CreateMap<Luggages, LuggagesDto>().ReverseMap();
+            CreateMap<AirplaneSeats, AirplaneSeatsDto>().ReverseMap();
             
 
         }

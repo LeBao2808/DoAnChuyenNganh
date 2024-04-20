@@ -13,16 +13,17 @@ namespace AirlineTickets.API.StartUp
         public void Mapping(WebApplicationBuilder builder)
         {
             #region Service Mapping
-            builder.Services.AddScoped<IBookingHistoryService, BookingHistoryService>();
-            builder.Services.AddScoped<IBookTicketsService, BookTicketsService>();
+            builder.Services.AddScoped<IBookingsService, BookingsService>();
             builder.Services.AddScoped<ICustomersService, CustomersService>();
             builder.Services.AddScoped<IFeedbackAndReviewsService, FeedbackAndReviewsService>();
-            builder.Services.AddScoped<IFlightService, FlightService>();
-            builder.Services.AddScoped<IPartnerService, PartnerService>();
-            builder.Services.AddScoped<IPayService, PayService>();
-            builder.Services.AddScoped<IPromotionService, PromotionService>();
+            builder.Services.AddScoped<IFlightsService, FlightsService>();
+            builder.Services.AddScoped<IAirlinesService, AirlinesService>();
+            builder.Services.AddScoped<IPaymentsService, PaymentsService>();
+            builder.Services.AddScoped<IPromotionsService, PromotionsService>();
             builder.Services.AddScoped<ILoginService, LoginService>();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<ITicketsService, TicketsService>();
+            builder.Services.AddScoped<ILuggagesService, LuggagesService>();
 
             //builder.Services.AddScoped(typeof(IPromotionRespository),typeof(PromotionRespository));
 
@@ -30,15 +31,17 @@ namespace AirlineTickets.API.StartUp
 
             #endregion Service Mapping
             #region Repository Mapping
-            builder.Services.AddScoped<IBookingHistoryRespository, BookingHistoryRespository>();
-            builder.Services.AddScoped<IBookTicketsRespository, BookTicketsRespository>();
+            builder.Services.AddScoped<IBookingsRespository, BookingsRespository>();
             builder.Services.AddScoped<ICustomersRespository, CustomersRespositorycs>();
             builder.Services.AddScoped<IFeedbackAndReviewsRespository, FeedbackAndReviewsRespository>();
-            builder.Services.AddScoped<IFlightRespository, FlightRespository>();
-            builder.Services.AddScoped<IPartnerRespository, PartnerRespository>();
-            builder.Services.AddScoped<IPayRespository, PayRespository>();
-            builder.Services.AddScoped<IPromotionRespository, PromotionRespository>();
+            builder.Services.AddScoped<IFlightsRespository, FlightsRespository>();
+            builder.Services.AddScoped<IAirlinesRespository, AirlinesRespository>();
+            builder.Services.AddScoped<IPaymentsRespository, PaymentsRespository>();
+            builder.Services.AddScoped<IPromotionsRespository, PromotionsRespository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<ITicketsRespository, TicketsRespository>();
+            builder.Services.AddScoped<ILuggagesRespository, LuggagesRespository>();
+            builder.Services.AddScoped<IAirplaneSeatsRespository, AirplaneSeatsRespository>();
 
             #endregion Repository Mapping
         }

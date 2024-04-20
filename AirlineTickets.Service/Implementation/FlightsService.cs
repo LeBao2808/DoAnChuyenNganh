@@ -1,4 +1,5 @@
 ﻿using AirlineTickets.DAL.Contract;
+using AirlineTickets.DAL.Implementation;
 using AirlineTickets.DAL.Models.Entity;
 using AirlineTickets.Model.Dto;
 using AirlineTickets.Service.Contract;
@@ -24,12 +25,15 @@ namespace AirlineTickets.Service.Implementation
         private readonly ITicketsRespository _ticketsRespository;
         private readonly IMapper _mapper;
         private IHttpContextAccessor _httpContextAccessor;
-        public FlightsService(IFlightsRespository BoPhanRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor, ITicketsRespository ticketsRespository)
+        private readonly IAirplaneSeatsRespository _airplaneSeatsRespository;
+       
+        public FlightsService(IFlightsRespository BoPhanRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor, ITicketsRespository ticketsRespository, IAirplaneSeatsRespository airplaneSeatsRespository)
         {
             _flightRespository = BoPhanRepository;
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
             _ticketsRespository = ticketsRespository;
+            _airplaneSeatsRespository = airplaneSeatsRespository;
         }
 
         public AppResponse<FlightsDto> Create(FlightsDto request)
@@ -48,8 +52,26 @@ namespace AirlineTickets.Service.Implementation
                 tuyendung.Id = Guid.NewGuid();
                 tuyendung.StartDate = request.StartDate.Value.AddDays(1);
                 tuyendung.CreatedBy = UserName;
-
+                tuyendung.CountStatus = 1;
+                tuyendung.TotalNumberOfSeats = 64;
+                tuyendung.NumberOfEmptySeats = request.TotalNumberOfSeats;
                 _flightRespository.Add(tuyendung);
+                var listSeat = new List<AirplaneSeats>();
+
+                for (int i = 0; i < tuyendung.TotalNumberOfSeats; i++)
+                {
+                    var seat = new AirplaneSeatsDto
+                    {
+                        Id = Guid.NewGuid(),
+                        FlightsId = tuyendung.Id,
+                        IsAirplane = false,
+                        Seats = i + 1
+                    };
+                    var seatEntity = _mapper.Map<AirplaneSeatsDto, AirplaneSeats>(seat);
+                    listSeat.Add(seatEntity);
+                }
+
+           _airplaneSeatsRespository.AddRange(listSeat);
 
                 _ticketsRespository.Add(new Tickets
                 {
@@ -172,6 +194,30 @@ namespace AirlineTickets.Service.Implementation
 
             }
         }
+        public void UpdateStatusAutomatically()
+        {
+            try
+            {
+                var currentDate = DateTime.Now.Date;
+       
+               
+               var listflight = _flightRespository.FindByPredicate(x => x.IsDeleted == false && x.StartDate <= currentDate ).ToList();
+              if( listflight != null )
+                {
+                    foreach( var flight in listflight )
+                    {
+                        flight.CountStatus = 0;
+                        flight.IsDeleted = true;
+                        _flightRespository.Edit(flight);
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public AppResponse<List<FlightsDto>> GetAlltrip()
         {
             var result = new AppResponse<List<FlightsDto>>();
@@ -205,6 +251,8 @@ namespace AirlineTickets.Service.Implementation
             try
             {
                 var predicate = PredicateBuilder.New<Flights>(true);
+               
+                bool foundResult = false;
                 if (Filters != null)
                 {
                     foreach (var filter in Filters)
@@ -216,10 +264,10 @@ namespace AirlineTickets.Service.Implementation
                                 predicate = predicate.And(m => m.FlightNumber.Contains(filter.Value));
                                 break;
                             case "startingPoint":
-                                predicate = predicate.And(m => m.StartingPoint.Contains(filter.Value));
+                                predicate = predicate.Or(m => m.StartingPoint.Contains(filter.Value));
                                 break;
                             case "endingPoint":
-                                predicate = predicate.And(m => m.EndingPoint.Contains(filter.Value));
+                                predicate = predicate.Or(m => m.EndingPoint.Contains(filter.Value));
                                 break;
                             case "flightTime":
                                 predicate = predicate.And(m => m.FlightTime.ToString().Contains(filter.Value));
@@ -236,6 +284,7 @@ namespace AirlineTickets.Service.Implementation
 
                                     // So sánh với ngày, tháng, năm của trường StartDate
                                     predicate = predicate.And(m => m.StartDate.Value.Year == year && m.StartDate.Value.Month == month && m.StartDate.Value.Day == day);
+                                    foundResult = true;
                                 }
                                 break;
 
@@ -244,7 +293,15 @@ namespace AirlineTickets.Service.Implementation
                         }
                     }
                 }
-                predicate = predicate.And(m => m.IsDeleted == false);
+           
+                    var todays = DateTime.Today;
+                    var years = todays.Year;
+                    var months = todays.Month;
+                    var days = todays.Day;
+                    predicate = predicate.Or(m => m.StartDate.Value.Year == years && m.StartDate.Value.Month == months && m.StartDate.Value.Day == days);
+                
+                predicate = predicate.And(m => m.IsDeleted == false );
+
                 return predicate;
             }
             catch (Exception)
@@ -259,21 +316,27 @@ namespace AirlineTickets.Service.Implementation
             var result = new AppResponse<SearchResponse<FlightsDto>>();
             try
             {
+                var coutstatus = _flightRespository.FindByPredicate(x => x.CountStatus == 1).ToList();
+                if(coutstatus.Count > 0 )
+                {
+                    UpdateStatusAutomatically();
+                }  
                 var query = BuildFilterExpression(request.Filters);
                 var numOfRecords = _flightRespository.CountRecordsByPredicate(query);
-
                 var users = _flightRespository.FindByPredicate(query);
                 int pageIndex = request.PageIndex ?? 1;
                 int pageSize = request.PageSize ?? 1;
                 int startIndex = (pageIndex - 1) * (int)pageSize;
                 var UserList = users.Skip(startIndex).Take(pageSize);
-                //var dtoList = _mapper.Map<List<FlightDto>>(UserList);
+               
                 var dtoList =UserList.Select(m => new FlightsDto
                 {
                     Id = m.Id,
                     FlightNumber = m.FlightNumber,
                     FlightTime = m.FlightTime,
                     StartDate = m.StartDate,
+                    TotalNumberOfSeats = m.TotalNumberOfSeats,
+                    FlightTimeEnd = m.FlightTimeEnd,
                     StartingPoint = m.StartingPoint,
                     EndingPoint = m.EndingPoint,
                     AirlinesId = m.AirlinesId,
@@ -281,7 +344,6 @@ namespace AirlineTickets.Service.Implementation
                     NumberOfEmptySeats = m.NumberOfEmptySeats,
                     TicketPrice = m.TicketPrice,
                 }).ToList();
-                
                 var searchUserResult = new SearchResponse<FlightsDto>
                 {
                     TotalRows = numOfRecords,

@@ -10,6 +10,8 @@ namespace AirlineTickets.DAL.Models.Entity
 {
    public class Bookings:BaseEntity
     {
+   
+
         [ForeignKey("Customers")]
         public Guid CustomersId { get; set; }
         [ForeignKey("CustomersId")]
@@ -28,7 +30,14 @@ namespace AirlineTickets.DAL.Models.Entity
         public int? TicketBookingStatus { get; set; }
         public DateTime? BookingDate { get; set; }
         public int? Quantity { get; set; }  
-      
+        
+        public int? Seats {  get; set; }
+
+        [ForeignKey("AirplaneSeats")]
+        public Guid AirplaneSeatsId { get; set; }
+
+        [ForeignKey("AirplaneSeatsId")]
+        public AirplaneSeats? AirplaneSeats { get; set; }
 
     }
 }

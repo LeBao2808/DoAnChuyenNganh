@@ -28,6 +28,7 @@ namespace AirlineTickets.Service.Implementation
             _httpContextAccessor = httpContextAccessor;
         }
 
+
         public AppResponse<AirlinesDto> Create(AirlinesDto request)
         {
             var result = new AppResponse<AirlinesDto>();

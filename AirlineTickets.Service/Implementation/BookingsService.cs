@@ -51,6 +51,7 @@ namespace AirlineTickets.Service.Implementation
                     CorrespondingTicketPrices = request.CorrespondingTicketPrices,
                     BookingDate = request.BookingDate,
                     Quantity = request.Quantity,
+                    Seats = request.Seats,
                     TicketBookingStatus = request.TicketBookingStatus,
                     LuggagesId = request.LuggagesId,
                     CreatedBy = UserName

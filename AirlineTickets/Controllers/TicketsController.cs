@@ -30,10 +30,10 @@ namespace AirlineTickets.Controllers
             return Ok(result);
         }
         [HttpGet]
-        [Route("IdTicket/{flightId}")]
-        public IActionResult Getidticket(Guid id)
+        [Route("IdTicket/{flightsId}")]
+        public IActionResult Getidticket(Guid flightsId)
         {
-            var result = _partnerService.GetIdTicket(id);
+            var result = _partnerService.GetIdTicket(flightsId);
             return Ok(result);
         }
         [HttpPost]

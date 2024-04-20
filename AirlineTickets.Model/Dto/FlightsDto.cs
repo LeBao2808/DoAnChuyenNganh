@@ -14,6 +14,8 @@ namespace AirlineTickets.Model.Dto
         public string? StartingPoint { get; set; }
         public string? EndingPoint { get; set; }
         public int? FlightTime { get; set; }
+        public int TotalNumberOfSeats { get; set; }
+        public int? FlightTimeEnd { get; set; }
         public DateTime? StartDate { get; set; }
         public int? NumberOfEmptySeats { get; set; }
         public double? TicketPrice { get; set; }
