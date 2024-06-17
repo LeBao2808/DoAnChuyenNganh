@@ -17,5 +17,6 @@ namespace AirlineTickets.Service.Contract
         public AppResponse<List<CustomersDto>> GetAll();
         public AppResponse<CustomersDto> GetId(Guid Id);
         Task<AppResponse<SearchResponse<CustomersDto>>> Search(SearchRequest request);
+        Task<byte[]> ExportToExcel(SearchRequest request);
     }
 }

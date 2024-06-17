@@ -13,7 +13,8 @@ namespace AirlineTickets.Model.Dto
         public double? PayAmount { get; set; }
         public DateTime? PayDate { get; set; }
         public bool? PaymentStatus { get; set; }
-
+        public double? boookame {  get; set; }
+        public Guid? BookingsId { get; set; }
         public string? PaymentMethods { get; set; }
     }
 }

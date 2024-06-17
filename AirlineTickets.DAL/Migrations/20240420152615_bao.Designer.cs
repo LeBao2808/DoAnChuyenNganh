@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AirlineTickets.DAL.Migrations
 {
     [DbContext(typeof(AirlineTicketsDBContext))]
-    [Migration("20240128071846_up1")]
-    partial class up1
+    [Migration("20240420152615_bao")]
+    partial class bao
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,243 +24,7 @@ namespace AirlineTickets.DAL.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("AirlineTickets.DAL.Models.Entity.BookingHistory", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BookTicketsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("BookingDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<double?>("CorrespondingTicketPrices")
-                        .HasColumnType("float");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("CustomersId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("FlightId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Modifiedby")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("TicketBookingStatus")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BookTicketsId");
-
-                    b.HasIndex("CustomersId");
-
-                    b.HasIndex("FlightId");
-
-                    b.ToTable("BookingsHistory");
-                });
-
-            modelBuilder.Entity("AirlineTickets.DAL.Models.Entity.BookTickets", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<double?>("CorrespondingTicketPrices")
-                        .HasColumnType("float");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("CustomersId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("FlightId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Modifiedby")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TicketBookingStatus")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CustomersId");
-
-                    b.HasIndex("FlightId");
-
-                    b.ToTable("BookTickets");
-                });
-
-            modelBuilder.Entity("AirlineTickets.DAL.Models.Entity.Customers", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Modifiedby")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Customers");
-                });
-
-            modelBuilder.Entity("AirlineTickets.DAL.Models.Entity.FeedbackAndReviews", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("CustomersId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Feedback")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("FlightId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Modifiedby")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double?>("PointEvaluation")
-                        .HasColumnType("float");
-
-                    b.Property<DateTime?>("ReactionTime")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CustomersId");
-
-                    b.HasIndex("FlightId");
-
-                    b.ToTable("FeedbackAndReviews");
-                });
-
-            modelBuilder.Entity("AirlineTickets.DAL.Models.Entity.Flight", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EndingPoint")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FlightNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("FlightTime")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Modifiedby")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("NumberOfEmptySeats")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("PartnerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("StartingPoint")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double?>("TicketPrice")
-                        .HasColumnType("float");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PartnerId");
-
-                    b.ToTable("Flight");
-                });
-
-            modelBuilder.Entity("AirlineTickets.DAL.Models.Entity.Partner", b =>
+            modelBuilder.Entity("AirlineTickets.DAL.Models.Entity.Airlines", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -301,10 +65,152 @@ namespace AirlineTickets.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Partner");
+                    b.ToTable("Airlines");
                 });
 
-            modelBuilder.Entity("AirlineTickets.DAL.Models.Entity.Pay", b =>
+            modelBuilder.Entity("AirlineTickets.DAL.Models.Entity.AirplaneSeats", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("FlightsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsAirplane")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Modifiedby")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Seats")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FlightsId");
+
+                    b.ToTable("AirplaneSeats");
+                });
+
+            modelBuilder.Entity("AirlineTickets.DAL.Models.Entity.Bookings", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("AirplaneSeatsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("BookingDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double?>("CorrespondingTicketPrices")
+                        .HasColumnType("float");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CustomersId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("LuggagesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Modifiedby")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Seats")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TicketBookingStatus")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("TicketsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AirplaneSeatsId");
+
+                    b.HasIndex("CustomersId");
+
+                    b.HasIndex("LuggagesId");
+
+                    b.HasIndex("TicketsId");
+
+                    b.ToTable("Bookings");
+                });
+
+            modelBuilder.Entity("AirlineTickets.DAL.Models.Entity.Customers", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("Gender")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Modifiedby")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Passport")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Customers");
+                });
+
+            modelBuilder.Entity("AirlineTickets.DAL.Models.Entity.FeedbackAndReviews", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -318,6 +224,147 @@ namespace AirlineTickets.DAL.Migrations
 
                     b.Property<Guid>("CustomersId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Feedback")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("FlightsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Modifiedby")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("PointEvaluation")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime?>("ReactionTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomersId");
+
+                    b.HasIndex("FlightsId");
+
+                    b.ToTable("FeedbackAndReviews");
+                });
+
+            modelBuilder.Entity("AirlineTickets.DAL.Models.Entity.Flights", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AirlinesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("CountStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EndingPoint")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FlightNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("FlightTime")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FlightTimeEnd")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Modifiedby")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("NumberOfEmptySeats")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("StartingPoint")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("TicketPrice")
+                        .HasColumnType("float");
+
+                    b.Property<int>("TotalNumberOfSeats")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AirlinesId");
+
+                    b.ToTable("Flights");
+                });
+
+            modelBuilder.Entity("AirlineTickets.DAL.Models.Entity.Luggages", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Modifiedby")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<string>("description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Luggages");
+                });
+
+            modelBuilder.Entity("AirlineTickets.DAL.Models.Entity.Payments", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BookingsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -342,12 +389,12 @@ namespace AirlineTickets.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomersId");
+                    b.HasIndex("BookingsId");
 
-                    b.ToTable("Pay");
+                    b.ToTable("Payments");
                 });
 
-            modelBuilder.Entity("AirlineTickets.DAL.Models.Entity.Promotion", b =>
+            modelBuilder.Entity("AirlineTickets.DAL.Models.Entity.Promotions", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -390,7 +437,41 @@ namespace AirlineTickets.DAL.Migrations
 
                     b.HasIndex("CustomersId");
 
-                    b.ToTable("Promotion");
+                    b.ToTable("Promotions");
+                });
+
+            modelBuilder.Entity("AirlineTickets.DAL.Models.Entity.Tickets", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("FlightsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Modifiedby")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("Price")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FlightsId");
+
+                    b.ToTable("Tickets");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -591,50 +672,47 @@ namespace AirlineTickets.DAL.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("AirlineTickets.DAL.Models.Entity.BookingHistory", b =>
+            modelBuilder.Entity("AirlineTickets.DAL.Models.Entity.AirplaneSeats", b =>
                 {
-                    b.HasOne("AirlineTickets.DAL.Models.Entity.BookTickets", "BookTickets")
+                    b.HasOne("AirlineTickets.DAL.Models.Entity.Flights", "Flights")
                         .WithMany()
-                        .HasForeignKey("BookTicketsId")
+                        .HasForeignKey("FlightsId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("AirlineTickets.DAL.Models.Entity.Customers", "Customers")
-                        .WithMany()
-                        .HasForeignKey("CustomersId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AirlineTickets.DAL.Models.Entity.Flight", "Flight")
-                        .WithMany()
-                        .HasForeignKey("FlightId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("BookTickets");
-
-                    b.Navigation("Customers");
-
-                    b.Navigation("Flight");
+                    b.Navigation("Flights");
                 });
 
-            modelBuilder.Entity("AirlineTickets.DAL.Models.Entity.BookTickets", b =>
+            modelBuilder.Entity("AirlineTickets.DAL.Models.Entity.Bookings", b =>
                 {
+                    b.HasOne("AirlineTickets.DAL.Models.Entity.AirplaneSeats", "AirplaneSeats")
+                        .WithMany()
+                        .HasForeignKey("AirplaneSeatsId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("AirlineTickets.DAL.Models.Entity.Customers", "Customers")
                         .WithMany()
                         .HasForeignKey("CustomersId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("AirlineTickets.DAL.Models.Entity.Flight", "Flight")
+                    b.HasOne("AirlineTickets.DAL.Models.Entity.Luggages", "Luggages")
                         .WithMany()
-                        .HasForeignKey("FlightId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("LuggagesId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("AirlineTickets.DAL.Models.Entity.Tickets", "Tickets")
+                        .WithMany()
+                        .HasForeignKey("TicketsId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("AirplaneSeats");
 
                     b.Navigation("Customers");
 
-                    b.Navigation("Flight");
+                    b.Navigation("Luggages");
+
+                    b.Navigation("Tickets");
                 });
 
             modelBuilder.Entity("AirlineTickets.DAL.Models.Entity.FeedbackAndReviews", b =>
@@ -645,40 +723,40 @@ namespace AirlineTickets.DAL.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("AirlineTickets.DAL.Models.Entity.Flight", "Flight")
+                    b.HasOne("AirlineTickets.DAL.Models.Entity.Flights", "Flights")
                         .WithMany()
-                        .HasForeignKey("FlightId")
+                        .HasForeignKey("FlightsId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Customers");
 
-                    b.Navigation("Flight");
+                    b.Navigation("Flights");
                 });
 
-            modelBuilder.Entity("AirlineTickets.DAL.Models.Entity.Flight", b =>
+            modelBuilder.Entity("AirlineTickets.DAL.Models.Entity.Flights", b =>
                 {
-                    b.HasOne("AirlineTickets.DAL.Models.Entity.Partner", "Partner")
+                    b.HasOne("AirlineTickets.DAL.Models.Entity.Airlines", "Airlines")
                         .WithMany()
-                        .HasForeignKey("PartnerId")
+                        .HasForeignKey("AirlinesId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Partner");
+                    b.Navigation("Airlines");
                 });
 
-            modelBuilder.Entity("AirlineTickets.DAL.Models.Entity.Pay", b =>
+            modelBuilder.Entity("AirlineTickets.DAL.Models.Entity.Payments", b =>
                 {
-                    b.HasOne("AirlineTickets.DAL.Models.Entity.Customers", "Customers")
+                    b.HasOne("AirlineTickets.DAL.Models.Entity.Bookings", "Bookings")
                         .WithMany()
-                        .HasForeignKey("CustomersId")
+                        .HasForeignKey("BookingsId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Customers");
+                    b.Navigation("Bookings");
                 });
 
-            modelBuilder.Entity("AirlineTickets.DAL.Models.Entity.Promotion", b =>
+            modelBuilder.Entity("AirlineTickets.DAL.Models.Entity.Promotions", b =>
                 {
                     b.HasOne("AirlineTickets.DAL.Models.Entity.Customers", "Customers")
                         .WithMany()
@@ -686,6 +764,17 @@ namespace AirlineTickets.DAL.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Customers");
+                });
+
+            modelBuilder.Entity("AirlineTickets.DAL.Models.Entity.Tickets", b =>
+                {
+                    b.HasOne("AirlineTickets.DAL.Models.Entity.Flights", "Flights")
+                        .WithMany()
+                        .HasForeignKey("FlightsId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Flights");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

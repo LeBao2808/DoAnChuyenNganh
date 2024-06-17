@@ -17,6 +17,7 @@ namespace AirlineTickets.Service.Contract
         public AppResponse<List<FlightsDto>> GetAll();
         public AppResponse<FlightsDto> GetId(Guid Id);
         public AppResponse<List<FlightsDto>> GetAlltrip();
+        public AppResponse<List<AirplaneSeatsDto>> GetFlights(Guid Id);
         Task<AppResponse<SearchResponse<FlightsDto>>> Search(SearchRequest request);
     }
 }

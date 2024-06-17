@@ -126,9 +126,11 @@ namespace AirlineTickets.Service.Implementation
                     PhoneNumber = m.PhoneNumber,
 
                 }).ToList();
-                result.IsSuccess = true;
-                result.Data = list;
-                return result;
+                //result.IsSuccess = true;
+                //result.Data = list;
+                //return result;
+                return result.BuildResult(list);
+            
             }
             catch (Exception ex)
             {

@@ -4,6 +4,7 @@ using AirlineTickets.DAL.Models.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AirlineTickets.DAL.Migrations
 {
     [DbContext(typeof(AirlineTicketsDBContext))]
-    partial class AirlineTicketsDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240419155017_up")]
+    partial class up
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -109,7 +111,7 @@ namespace AirlineTickets.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("AirplaneSeatsId")
+                    b.Property<Guid>("AirplaneSeatsId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("BookingDate")
@@ -686,7 +688,8 @@ namespace AirlineTickets.DAL.Migrations
                     b.HasOne("AirlineTickets.DAL.Models.Entity.AirplaneSeats", "AirplaneSeats")
                         .WithMany()
                         .HasForeignKey("AirplaneSeatsId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("AirlineTickets.DAL.Models.Entity.Customers", "Customers")
                         .WithMany()

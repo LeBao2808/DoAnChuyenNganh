@@ -10,6 +10,7 @@ using MayNghien.Models.Response.Base;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -114,11 +115,12 @@ namespace AirlineTickets.Service.Implementation
             try
             {
                 var query = _payRespository.GetAll().Where(x => x.IsDeleted == false);
-                var list = query.Where(x => x.IsDeleted == false).Select(m => new PaymentsDto
+                var list = query.Where(x => x.IsDeleted == false).Include(x => x.Bookings).Select(m => new PaymentsDto
                 {
                     Id = m.Id,
                   PaymentStatus = m.PaymentStatus,
-                  
+                  BookingsId = m.BookingsId,
+                  boookame =(double) m.Bookings.CorrespondingTicketPrices,
                   PayAmount = m.PayAmount,
                   PayDate = m.PayDate,
                   PaymentMethods = m.PaymentMethods,

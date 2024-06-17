@@ -2,6 +2,7 @@
 using AirlineTickets.DAL.Implementation;
 using AirlineTickets.DAL.Models.Entity;
 using AirlineTickets.Model.Dto;
+using AirlineTickets.Model.Response;
 using AirlineTickets.Service.Contract;
 using AutoMapper;
 using LinqKit;
@@ -14,8 +15,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Schema;
 
 namespace AirlineTickets.Service.Implementation
 {
@@ -53,7 +56,6 @@ namespace AirlineTickets.Service.Implementation
                 tuyendung.StartDate = request.StartDate.Value.AddDays(1);
                 tuyendung.CreatedBy = UserName;
                 tuyendung.CountStatus = 1;
-                tuyendung.TotalNumberOfSeats = 64;
                 tuyendung.NumberOfEmptySeats = request.TotalNumberOfSeats;
                 _flightRespository.Add(tuyendung);
                 var listSeat = new List<AirplaneSeats>();
@@ -116,6 +118,32 @@ namespace AirlineTickets.Service.Implementation
             }
         }
 
+      public AppResponse<List<AirplaneSeatsDto>> GetFlights(Guid Id)
+        {
+            var result = new AppResponse<List<AirplaneSeatsDto>>();
+            try
+            {
+                var listseat = _airplaneSeatsRespository.GetAll().Where(x => x.FlightsId == Id);
+
+                var idListSeats = listseat.OrderBy(x => x.Seats).Select(x => new AirplaneSeatsDto {
+                   Id = x.Id,
+                   FlightsId = x.FlightsId,
+                   IsAirplane = x.IsAirplane,
+                }).ToList();
+
+
+                result.IsSuccess = true;
+                result.Data = idListSeats;
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                result.IsSuccess = false;
+                result.Message = ex.Message + ":" + ex.StackTrace;
+                return result;
+            }
+        }
 
 
         public AppResponse<FlightsDto> Edit(FlightsDto tuyendung)
@@ -246,45 +274,62 @@ namespace AirlineTickets.Service.Implementation
                 return result.BuildError(ex.ToString());
             }
         }
-        private ExpressionStarter<Flights> BuildFilterExpression(IList<Filter> Filters)
+        private ExpressionStarter<Flights> BuildFilterExpression(IList<Filter> filters)
         {
             try
             {
-                var predicate = PredicateBuilder.New<Flights>(true);
-               
-                bool foundResult = false;
-                if (Filters != null)
+                var predicate = PredicateBuilder.New<Flights>(false); // Bắt đầu với giá trị false
+
+                bool isPredicateEmpty = true; // Biến để kiểm tra xem có điều kiện nào được thêm vào predicate hay không
+
+                if (filters != null)
                 {
-                    foreach (var filter in Filters)
+                    foreach (var filter in filters)
                     {
                         switch (filter.FieldName)
                         {
-                           
                             case "flightNumber":
-                                predicate = predicate.And(m => m.FlightNumber.Contains(filter.Value));
+                                predicate = predicate.Or(m => m.FlightNumber.Contains(filter.Value));
+                                isPredicateEmpty = false; // Đánh dấu là có điều kiện đã được thêm vào predicate
                                 break;
+
                             case "startingPoint":
                                 predicate = predicate.Or(m => m.StartingPoint.Contains(filter.Value));
+                                isPredicateEmpty = false; // Đánh dấu là có điều kiện đã được thêm vào predicate
                                 break;
+
                             case "endingPoint":
                                 predicate = predicate.Or(m => m.EndingPoint.Contains(filter.Value));
+                                isPredicateEmpty = false; // Đánh dấu là có điều kiện đã được thêm vào predicate
                                 break;
-                            case "flightTime":
-                                predicate = predicate.And(m => m.FlightTime.ToString().Contains(filter.Value));
-                                break;
-                            case "startDate":
 
+                            case "flightTime":
+                                predicate = predicate.Or(m => m.FlightTime.ToString().Contains(filter.Value));
+                                isPredicateEmpty = false; // Đánh dấu là có điều kiện đã được thêm vào predicate
+                                break;
+
+                            case "startDate":
                                 if (DateTime.TryParse(filter.Value, out DateTime startDate))
                                 {
-                                    // Lấy ngày, tháng, năm của startDate
                                     var startDateWithoutTime = startDate.Date;
                                     var year = startDateWithoutTime.Year;
                                     var month = startDateWithoutTime.Month;
                                     var day = startDateWithoutTime.Day;
 
-                                    // So sánh với ngày, tháng, năm của trường StartDate
-                                    predicate = predicate.And(m => m.StartDate.Value.Year == year && m.StartDate.Value.Month == month && m.StartDate.Value.Day == day);
-                                    foundResult = true;
+                                    predicate = predicate.Or(m => m.StartDate.Value.Year == year && m.StartDate.Value.Month == month && m.StartDate.Value.Day == day);
+                                    isPredicateEmpty = false; // Đánh dấu là có điều kiện đã được thêm vào predicate
+                                }
+                                else
+                                {
+                                    var today = DateTime.Today;
+                                    var years = today.Year;
+                                    var months = today.Month;
+                                    var days = today.Day;
+
+                                    predicate = predicate.Or(m => m.StartDate.Value.Year >= years &&
+                                                                   m.StartDate.Value.Month >= months &&
+                                                                   m.StartDate.Value.Day >= days);
+                                    isPredicateEmpty = false; // Đánh dấu là có điều kiện đã được thêm vào predicate
                                 }
                                 break;
 
@@ -293,21 +338,63 @@ namespace AirlineTickets.Service.Implementation
                         }
                     }
                 }
-           
-                    var todays = DateTime.Today;
-                    var years = todays.Year;
-                    var months = todays.Month;
-                    var days = todays.Day;
-                    predicate = predicate.Or(m => m.StartDate.Value.Year == years && m.StartDate.Value.Month == months && m.StartDate.Value.Day == days);
-                
-                predicate = predicate.And(m => m.IsDeleted == false );
+
+                // Nếu không có điều kiện nào được thêm vào predicate, thêm điều kiện mới
+                if (isPredicateEmpty)
+                {
+                    var today = DateTime.Today;
+                    var years = today.Year;
+                    var months = today.Month;
+                    var days = today.Day;
+
+                    predicate = PredicateBuilder.New<Flights>(true)
+                        .Or(m => m.StartDate.Value.Year >= years &&
+                                 m.StartDate.Value.Month >= months &&
+                                 m.StartDate.Value.Day >= days);
+                }
+
+                predicate = predicate.And(m => m.IsDeleted == false);
 
                 return predicate;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                throw new Exception("Error building filter expression", ex);
+            }
+        }
 
-                throw;
+
+        private ExpressionStarter<Flights> BuildFilterExpression2(IList<Filter> filters)
+        {
+            try
+            {
+                var predicate = PredicateBuilder.New<Flights>(false); // Bắt đầu với giá trị false
+
+                bool isPredicateEmpty = true; // Biến để kiểm tra xem có điều kiện nào được thêm vào predicate hay không
+
+                if (filters != null)
+                {
+                   
+                // Nếu không có điều kiện nào được thêm vào predicate, thêm điều kiện mới
+                if (isPredicateEmpty)
+                {
+                        var today = DateTime.Today;
+                        var years = today.Year;
+                        var months = today.Month;
+                        var days = today.Day;
+
+                        predicate = predicate.Or(m => m.StartDate.Value.Year >= years &&
+                                                       m.StartDate.Value.Month >= months &&
+                                                       m.StartDate.Value.Day >= days);
+                    }
+                }
+                predicate = predicate.And(m => m.IsDeleted == false);
+
+                return predicate;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error building filter expression", ex);
             }
         }
 
@@ -317,19 +404,29 @@ namespace AirlineTickets.Service.Implementation
             try
             {
                 var coutstatus = _flightRespository.FindByPredicate(x => x.CountStatus == 1).ToList();
-                if(coutstatus.Count > 0 )
+                if (coutstatus.Count > 0)
                 {
                     UpdateStatusAutomatically();
-                }  
+                }
+
                 var query = BuildFilterExpression(request.Filters);
+                
+
                 var numOfRecords = _flightRespository.CountRecordsByPredicate(query);
+                if (numOfRecords == 0)
+                {
+
+                    var query2 = BuildFilterExpression2(request.Filters);
+                    query = query2;
+                    numOfRecords = _flightRespository.CountRecordsByPredicate(query);
+                }
                 var users = _flightRespository.FindByPredicate(query);
                 int pageIndex = request.PageIndex ?? 1;
                 int pageSize = request.PageSize ?? 1;
                 int startIndex = (pageIndex - 1) * (int)pageSize;
                 var UserList = users.Skip(startIndex).Take(pageSize);
-               
-                var dtoList =UserList.Select(m => new FlightsDto
+
+                var dtoList = UserList.Select(m => new FlightsDto
                 {
                     Id = m.Id,
                     FlightNumber = m.FlightNumber,
@@ -344,6 +441,7 @@ namespace AirlineTickets.Service.Implementation
                     NumberOfEmptySeats = m.NumberOfEmptySeats,
                     TicketPrice = m.TicketPrice,
                 }).ToList();
+
                 var searchUserResult = new SearchResponse<FlightsDto>
                 {
                     TotalRows = numOfRecords,
@@ -356,11 +454,9 @@ namespace AirlineTickets.Service.Implementation
                 result.IsSuccess = true;
 
                 return result;
-
             }
             catch (Exception ex)
             {
-
                 return result.BuildError(ex.ToString());
             }
         }

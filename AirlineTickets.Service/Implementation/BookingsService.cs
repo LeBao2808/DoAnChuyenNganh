@@ -22,13 +22,15 @@ namespace AirlineTickets.Service.Implementation
         private readonly IBookingsRespository _bookTicketsRespository;
         private readonly IMapper _mapper;
         private IHttpContextAccessor _httpContextAccessor;
+        private readonly IAirplaneSeatsRespository _airplaneSeatsRespository;
         private readonly ICustomersRespository _CustomersRespository;
-        public BookingsService(IBookingsRespository BoPhanRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor , ICustomersRespository customersRespository)
+        public BookingsService(IBookingsRespository BoPhanRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor , ICustomersRespository customersRespository , IAirplaneSeatsRespository airplaneSeatsRespository)
         {
             _bookTicketsRespository = BoPhanRepository;
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
             _CustomersRespository = customersRespository;
+            _airplaneSeatsRespository = airplaneSeatsRespository;
         }
 
         public AppResponse<BookingsDto> Create(BookingsDto request)
@@ -40,23 +42,42 @@ namespace AirlineTickets.Service.Implementation
                 if (UserName == null)
                     return result.BuildError("Cannot find Account by this user");
 
+         
+                var airplaneseat = _airplaneSeatsRespository.FindByPredicate(x => x.Id == request.AirplaneSeatsId && !x.IsDeleted).FirstOrDefault();
+                if (airplaneseat.IsAirplane != null && airplaneseat.IsAirplane == true) // Kiểm tra xem IsAirplane có tồn tại và có giá trị true không
+                {
+                    return result.BuildError("Số ghế đã được đặt.");
+                }
                 var Customer = _mapper.Map<Customers>(request.Customers);
                 Customer.Id = new Guid();
                 _CustomersRespository.Add(Customer);
 
                 var bookTickets = new Bookings
                 {
+              
                    TicketsId = request.TicketsId,
                     CustomersId = Customer.Id,
                     CorrespondingTicketPrices = request.CorrespondingTicketPrices,
                     BookingDate = request.BookingDate,
                     Quantity = request.Quantity,
-                    Seats = request.Seats,
                     TicketBookingStatus = request.TicketBookingStatus,
                     LuggagesId = request.LuggagesId,
-                    CreatedBy = UserName
+                    CreatedBy = UserName,
+                    AirplaneSeatsId = request.AirplaneSeatsId,
                 };
-    
+            
+
+                if (airplaneseat != null) // Kiểm tra xem airplaneseat có tồn tại không
+                {
+                    
+                   
+                        airplaneseat.IsAirplane = true;
+                        _airplaneSeatsRespository.Edit(airplaneseat);
+                        bookTickets.Seats = airplaneseat.Seats;
+                    
+                }
+        
+              
                 bookTickets.Id = new Guid();
                 _bookTicketsRespository.Add(bookTickets);
 
@@ -97,7 +118,7 @@ namespace AirlineTickets.Service.Implementation
             }
         }
 
-
+        
 
         public AppResponse<BookingsDto> Edit(BookingsDto tuyendung)
         {

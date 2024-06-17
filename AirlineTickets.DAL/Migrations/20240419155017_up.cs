@@ -5,10 +5,32 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AirlineTickets.DAL.Migrations
 {
-    public partial class up1 : Migration
+    public partial class up : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Airlines",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Information = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LoGo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Modifiedby = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Airlines", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -57,6 +79,8 @@ namespace AirlineTickets.DAL.Migrations
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Passport = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Gender = table.Column<bool>(type: "bit", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -69,16 +93,13 @@ namespace AirlineTickets.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Partner",
+                name: "Luggages",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Information = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LoGo = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Price = table.Column<double>(type: "float", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -87,7 +108,40 @@ namespace AirlineTickets.DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Partner", x => x.Id);
+                    table.PrimaryKey("PK_Luggages", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Flights",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FlightNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AirlinesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TotalNumberOfSeats = table.Column<int>(type: "int", nullable: false),
+                    StartingPoint = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EndingPoint = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FlightTime = table.Column<int>(type: "int", nullable: true),
+                    FlightTimeEnd = table.Column<int>(type: "int", nullable: true),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    NumberOfEmptySeats = table.Column<int>(type: "int", nullable: true),
+                    TicketPrice = table.Column<double>(type: "float", nullable: true),
+                    CountStatus = table.Column<int>(type: "int", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Modifiedby = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Flights", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Flights_Airlines_AirlinesId",
+                        column: x => x.AirlinesId,
+                        principalTable: "Airlines",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -197,34 +251,7 @@ namespace AirlineTickets.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Pay",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CustomersId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PayAmount = table.Column<double>(type: "float", nullable: true),
-                    PayDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    PaymentStatus = table.Column<bool>(type: "bit", nullable: true),
-                    PaymentMethods = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Modifiedby = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Pay", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Pay_Customers_CustomersId",
-                        column: x => x.CustomersId,
-                        principalTable: "Customers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Promotion",
+                name: "Promotions",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -242,9 +269,9 @@ namespace AirlineTickets.DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Promotion", x => x.Id);
+                    table.PrimaryKey("PK_Promotions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Promotion_Customers_CustomersId",
+                        name: "FK_Promotions_Customers_CustomersId",
                         column: x => x.CustomersId,
                         principalTable: "Customers",
                         principalColumn: "Id",
@@ -252,18 +279,13 @@ namespace AirlineTickets.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Flight",
+                name: "AirplaneSeats",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FlightNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PartnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    StartingPoint = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    EndingPoint = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FlightTime = table.Column<int>(type: "int", nullable: true),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    NumberOfEmptySeats = table.Column<int>(type: "int", nullable: true),
-                    TicketPrice = table.Column<double>(type: "float", nullable: true),
+                    FlightsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Seats = table.Column<int>(type: "int", nullable: true),
+                    IsAirplane = table.Column<bool>(type: "bit", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -272,44 +294,11 @@ namespace AirlineTickets.DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Flight", x => x.Id);
+                    table.PrimaryKey("PK_AirplaneSeats", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Flight_Partner_PartnerId",
-                        column: x => x.PartnerId,
-                        principalTable: "Partner",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "BookTickets",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CustomersId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FlightId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: true),
-                    CorrespondingTicketPrices = table.Column<double>(type: "float", nullable: true),
-                    TicketBookingStatus = table.Column<int>(type: "int", nullable: true),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Modifiedby = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BookTickets", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_BookTickets_Customers_CustomersId",
-                        column: x => x.CustomersId,
-                        principalTable: "Customers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_BookTickets_Flight_FlightId",
-                        column: x => x.FlightId,
-                        principalTable: "Flight",
+                        name: "FK_AirplaneSeats_Flights_FlightsId",
+                        column: x => x.FlightsId,
+                        principalTable: "Flights",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -320,7 +309,7 @@ namespace AirlineTickets.DAL.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CustomersId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FlightId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FlightsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Feedback = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PointEvaluation = table.Column<double>(type: "float", nullable: true),
                     ReactionTime = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -340,26 +329,20 @@ namespace AirlineTickets.DAL.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_FeedbackAndReviews_Flight_FlightId",
-                        column: x => x.FlightId,
-                        principalTable: "Flight",
+                        name: "FK_FeedbackAndReviews_Flights_FlightsId",
+                        column: x => x.FlightsId,
+                        principalTable: "Flights",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "BookingsHistory",
+                name: "Tickets",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BookTicketsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CustomersId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FlightId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    BookingDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Quantity = table.Column<int>(type: "int", nullable: true),
-                    CorrespondingTicketPrices = table.Column<double>(type: "float", nullable: true),
-                    TicketBookingStatus = table.Column<int>(type: "int", nullable: true),
+                    FlightsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -368,26 +351,95 @@ namespace AirlineTickets.DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BookingsHistory", x => x.Id);
+                    table.PrimaryKey("PK_Tickets", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BookingsHistory_BookTickets_BookTicketsId",
-                        column: x => x.BookTicketsId,
-                        principalTable: "BookTickets",
+                        name: "FK_Tickets_Flights_FlightsId",
+                        column: x => x.FlightsId,
+                        principalTable: "Flights",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Bookings",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CustomersId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    LuggagesId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    TicketsId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CorrespondingTicketPrices = table.Column<double>(type: "float", nullable: true),
+                    TicketBookingStatus = table.Column<int>(type: "int", nullable: true),
+                    BookingDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Quantity = table.Column<int>(type: "int", nullable: true),
+                    Seats = table.Column<int>(type: "int", nullable: true),
+                    AirplaneSeatsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Modifiedby = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Bookings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Bookings_AirplaneSeats_AirplaneSeatsId",
+                        column: x => x.AirplaneSeatsId,
+                        principalTable: "AirplaneSeats",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_BookingsHistory_Customers_CustomersId",
+                        name: "FK_Bookings_Customers_CustomersId",
                         column: x => x.CustomersId,
                         principalTable: "Customers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_BookingsHistory_Flight_FlightId",
-                        column: x => x.FlightId,
-                        principalTable: "Flight",
+                        name: "FK_Bookings_Luggages_LuggagesId",
+                        column: x => x.LuggagesId,
+                        principalTable: "Luggages",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Bookings_Tickets_TicketsId",
+                        column: x => x.TicketsId,
+                        principalTable: "Tickets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "Payments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BookingsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PayAmount = table.Column<double>(type: "float", nullable: true),
+                    PayDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    PaymentStatus = table.Column<bool>(type: "bit", nullable: true),
+                    PaymentMethods = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Modifiedby = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Payments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Payments_Bookings_BookingsId",
+                        column: x => x.BookingsId,
+                        principalTable: "Bookings",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AirplaneSeats_FlightsId",
+                table: "AirplaneSeats",
+                column: "FlightsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -429,29 +481,24 @@ namespace AirlineTickets.DAL.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BookingsHistory_BookTicketsId",
-                table: "BookingsHistory",
-                column: "BookTicketsId");
+                name: "IX_Bookings_AirplaneSeatsId",
+                table: "Bookings",
+                column: "AirplaneSeatsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BookingsHistory_CustomersId",
-                table: "BookingsHistory",
+                name: "IX_Bookings_CustomersId",
+                table: "Bookings",
                 column: "CustomersId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BookingsHistory_FlightId",
-                table: "BookingsHistory",
-                column: "FlightId");
+                name: "IX_Bookings_LuggagesId",
+                table: "Bookings",
+                column: "LuggagesId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BookTickets_CustomersId",
-                table: "BookTickets",
-                column: "CustomersId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BookTickets_FlightId",
-                table: "BookTickets",
-                column: "FlightId");
+                name: "IX_Bookings_TicketsId",
+                table: "Bookings",
+                column: "TicketsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FeedbackAndReviews_CustomersId",
@@ -459,24 +506,29 @@ namespace AirlineTickets.DAL.Migrations
                 column: "CustomersId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FeedbackAndReviews_FlightId",
+                name: "IX_FeedbackAndReviews_FlightsId",
                 table: "FeedbackAndReviews",
-                column: "FlightId");
+                column: "FlightsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Flight_PartnerId",
-                table: "Flight",
-                column: "PartnerId");
+                name: "IX_Flights_AirlinesId",
+                table: "Flights",
+                column: "AirlinesId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Pay_CustomersId",
-                table: "Pay",
+                name: "IX_Payments_BookingsId",
+                table: "Payments",
+                column: "BookingsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Promotions_CustomersId",
+                table: "Promotions",
                 column: "CustomersId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Promotion_CustomersId",
-                table: "Promotion",
-                column: "CustomersId");
+                name: "IX_Tickets_FlightsId",
+                table: "Tickets",
+                column: "FlightsId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -497,16 +549,13 @@ namespace AirlineTickets.DAL.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "BookingsHistory");
-
-            migrationBuilder.DropTable(
                 name: "FeedbackAndReviews");
 
             migrationBuilder.DropTable(
-                name: "Pay");
+                name: "Payments");
 
             migrationBuilder.DropTable(
-                name: "Promotion");
+                name: "Promotions");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -515,16 +564,25 @@ namespace AirlineTickets.DAL.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "BookTickets");
+                name: "Bookings");
+
+            migrationBuilder.DropTable(
+                name: "AirplaneSeats");
 
             migrationBuilder.DropTable(
                 name: "Customers");
 
             migrationBuilder.DropTable(
-                name: "Flight");
+                name: "Luggages");
 
             migrationBuilder.DropTable(
-                name: "Partner");
+                name: "Tickets");
+
+            migrationBuilder.DropTable(
+                name: "Flights");
+
+            migrationBuilder.DropTable(
+                name: "Airlines");
         }
     }
 }

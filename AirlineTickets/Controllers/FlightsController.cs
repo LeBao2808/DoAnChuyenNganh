@@ -30,6 +30,15 @@ namespace AirlineTickets.API.Controllers
             var result = _flightService.GetAlltrip();
             return Ok(result);
         }
+
+        [HttpGet]
+        [Route("flights/{fightId}")]
+        public IActionResult GetAlSeats(Guid fightId)
+        {
+            var result = _flightService.GetFlights(fightId);
+            return Ok(result);
+        }
+
         [HttpGet]
         [Route("{id}")]
         public IActionResult Get(Guid id)

@@ -8,6 +8,7 @@ using MayNghien.Common.Helpers;
 using MayNghien.Models.Request.Base;
 using MayNghien.Models.Response.Base;
 using Microsoft.AspNetCore.Http;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -117,10 +118,10 @@ namespace AirlineTickets.Service.Implementation
                 var list = query.Where(x => x.IsDeleted == false).Select(m => new CustomersDto
                 {
                     Id = m.Id,
-                   Name = m.Name,
-                   Address = m.Address,
-                   Email = m.Email,
-                   PhoneNumber = m.PhoneNumber,
+                    Name = m.Name,
+                    Address = m.Address,
+                    Email = m.Email,
+                    PhoneNumber = m.PhoneNumber,
 
                 }).ToList();
                 result.IsSuccess = true;
@@ -208,7 +209,7 @@ namespace AirlineTickets.Service.Implementation
                     Name = x.Name,
                     PhoneNumber = x.PhoneNumber,
                 }).ToList();
-              
+
                 var searchUserResult = new SearchResponse<CustomersDto>
                 {
                     TotalRows = numOfRecords,
@@ -227,6 +228,55 @@ namespace AirlineTickets.Service.Implementation
             {
 
                 return result.BuildError(ex.ToString());
+            }
+        }
+
+        public async Task<byte[]> ExportToExcel(SearchRequest request)
+        {
+            var data = await this.Search(request);
+            using (var package = new ExcelPackage())
+            {
+                var worksheet = package.Workbook.Worksheets.Add("SelectedRows");
+
+                int row = 1;
+                worksheet.Cells[row, 1].Value = "Tên Nhân Viên";
+                worksheet.Cells[row, 1].Style.Font.Bold = true;
+                worksheet.Cells[row, 2].Value = "Địa Chỉ";
+                worksheet.Cells[row, 2].Style.Font.Bold = true;
+                worksheet.Cells[row, 3].Value = "Email";
+                worksheet.Cells[row, 3].Style.Font.Bold = true;
+                worksheet.Cells[row, 4].Value = "Số Điện Thoại";
+                worksheet.Cells[row, 4].Style.Font.Bold = true;
+                worksheet.Cells[row, 5].Value = "Hộ Chiếu";
+                worksheet.Cells[row, 5].Style.Font.Bold = true;
+               
+
+                foreach (var caTangCa in data.Data.Data)
+                {
+               
+                   
+
+            
+                    var listkhachhang = _customersRespository.FindByPredicate(x => x.Id == caTangCa.Id).Where(x => x.IsDeleted == false).ToList();
+                    foreach (var nhanVien in listkhachhang)
+                    {
+                        var nhanviens = _customersRespository.FindByPredicate(x => x.Id == nhanVien.Id).FirstOrDefault();
+                        worksheet.Cells[row + 1, 1].Value = nhanviens.Name;
+                        worksheet.Cells[row + 1, 2].Value = nhanviens.Address;
+                        worksheet.Cells[row + 1, 3].Value = nhanviens.Email;
+                        worksheet.Cells[row + 1, 4].Value = nhanviens.PhoneNumber;
+                        worksheet.Cells[row + 1, 5].Value = nhanviens.Passport;
+                    
+
+                        // Các thông tin khác của nhân viên tăng ca (nếu có)
+                        row++;
+                    }
+
+                    // Khoảng trắng giữa các ca tăng ca
+ 
+                }
+
+                return package.GetAsByteArray();
             }
         }
 
